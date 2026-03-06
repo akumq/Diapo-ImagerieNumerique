@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>webgl-workshop</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="slides-container" class="reveal">
+        <div class="slides">
+
+          <section data-demo="cube">
+            <h2>Fondamentaux de la 3D</h2>
+            <p>Atelier Interactif</p>
+          </section>
+          
+
+          <section>
+            <section data-demo="raw-data">
+                <h2>1.1 Géométrie & Maillage</h2>
+                <p>L'Atome de la 3D : <strong>Le Triangle</strong></p>
+                <ul style="font-size: 0.8em">
+                    <li><strong>Vertex</strong> : Position + Données</li>
+                    <li><strong>Face</strong> : Surface</li>
+                </ul>
+            </section>
+            
+            <section data-demo="raw-data">
+                <h2>1.2 Normales & Culling</h2>
+                <p>Orientation & Optimisation</p>
+                <ul style="font-size: 0.8em">
+                    <li><strong>Normale</strong> : Vecteur indiquant "où regarde" la face.</li>
+                    <li><strong>Backface Culling</strong> : On ne dessine pas l'arrière !</li>
+                </ul>
+            </section>
+
+            <section data-demo="transform">
+                <h2>1.3 Transformations</h2>
+                <p><strong>Les Matrices</strong> déplacent le monde.</p>
+                <ul>
+                    <li>Translation, Rotation, Échelle</li>
+                </ul>
+            </section>
+    
+            <section data-demo="scenegraph">
+                <h2>1.4 Hiérarchie (Scene Graph)</h2>
+                <p>Combinaison de Matrices</p>
+                <ul style="font-size: 0.8em">
+                    <li>Le <strong>Bras</strong> hérite du mouvement de l'<strong>Épaule</strong>.</li>
+                </ul>
+                <p style="color: #ffaa00">"Matrice Monde = Parent x Locale"</p>
+            </section>
+          </section>
+    
+
+          <section>
+            <section data-demo="pipeline" data-stage="intro">
+                <h2>2.0 Le Pipeline Graphique</h2>
+                <p>Vue d'ensemble Complète</p>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="application">
+                <h2>2.1 Étape Application (CPU)</h2>
+                <p>Envoi des Données du Modèle.</p>
+                <aside class="notes">Le CPU prépare les données.</aside>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="vertex">
+                <h2>2.2 Traitement des Vertex</h2>
+                <p>Positionnement des points.</p>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="geometry">
+                <h2>2.3 Assemblage Géométrique</h2>
+                <p>Relier les points.</p>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="raster">
+                <h2>2.4 Rastérisation</h2>
+                <p>Transformer les formes en pixels.</p>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="fragment">
+                <h2>2.5 Fragment Shader</h2>
+                <p>Calcul de la Couleur & Lumière.</p>
+            </section>
+    
+            <section data-demo="pipeline" data-stage="screen">
+                <h2>2.6 Sortie Écran</h2>
+                <p>L'Image Finale.</p>
+            </section>
+          </section>
+    
+
+          <section>
+            <section data-demo="lighting">
+                <h2>3.1 Loi de Lambert</h2>
+                <p><strong>L'Angle d'Incidence</strong> est clé.</p>
+                <p style="font-size: 0.8em">"Une surface face à la lumière (90&deg;) reçoit 100% de l'énergie. Une surface rasante (0&deg;) n'en reçoit aucune."</p>
+                <p style="color: #ffaa00; font-family: monospace;">Intensité = N &middot; L</p>
+            </section>
+    
+            <section data-demo="raytracing">
+                <h2>3.2 Théorie du Raytracing</h2>
+                <p>Une alternative à la Rastérisation.</p>
+                <ul style="font-size: 0.8em">
+                    <li>Au lieu de projeter des triangles...</li>
+                    <li>On <strong>lance des rayons</strong> depuis l'œil vers la scène.</li>
+                    <li>Permet : Ombres, Réflexions et Réfractions réalistes "gratuitement".</li>
+                </ul>
+            </section>
+    
+            <section data-demo="lighting">
+                <h2>3.3 Types de Lumières</h2>
+                <ul>
+                    <li><strong>Directionnelle</strong> : Soleil</li>
+                    <li><strong>Ponctuelle</strong> : Ampoule</li>
+                    <li><strong>Ambiante</strong> : Lumière indirecte</li>
+                </ul>
+            </section>
+            <section data-demo="lighting">
+                <h2>3.4 Interaction Lumière-Matière</h2>
+                <ul>
+                    <li><strong>Diffuse</strong> : Surface mate</li>
+                    <li><strong>Spéculaire</strong> : Brillance</li>
+                </ul>
+            </section>
+          </section>
+    
+
+          <section>
+            <section data-demo="camera">
+                <h2>4.1 Caméras et Projection</h2>
+                <ul style="font-size: 0.8em">
+                    <li><strong>Perspective</strong> : Vision humaine (Point de fuite).</li>
+                    <li><strong>Orthographique</strong> : Vision technique (Parallèle, sans déformation).</li>
+                </ul>
+            </section>
+    
+            <section data-demo="pbr">
+                <h2>4.2 Textures et Matériaux (PBR)</h2>
+                <p>Rendu Basé sur la Physique</p>
+                <ul style="font-size: 0.8em">
+                    <li><strong>Albedo</strong> : Couleur de base (Texture).</li>
+                    <li><strong>Normal Map</strong> : Simule du relief (Détails fins).</li>
+                    <li><strong>Roughness</strong> : Lisse ou Rugueux ?</li>
+                    <li><strong>Metalness</strong> : Métallique ou Diélectrique ?</li>
+                </ul>
+            </section>
+          </section>
+    
+
+          <section>
+            <section data-demo="picking">
+                <h2>5.1 Interaction (Concept)</h2>
+                <p>Le Défi : <strong>2D</strong> (Souris) &rarr; <strong>3D</strong> (Monde)</p>
+                <p>La solution : <strong>Le Raycasting</strong></p>
+                <p style="font-size: 0.8em">"Imaginez un laser qui part de la caméra et traverse le pixel de la souris."</p>
+            </section>
+    
+            <section data-demo="picking">
+                <h2>5.2 Interaction (Maths)</h2>
+                <ul style="font-size: 0.7em">
+                    <li><strong>1. Normalisation (NDC)</strong> : Coordonnées pixel &rarr; [-1, 1].</li>
+                    <li><strong>2. Unproject</strong> : On multiplie par l'inverse des matrices.</li>
+                    <li style="color: #ffaa00">Ray = P⁻¹ &times; V⁻¹ &times; ScreenPos</li>
+                    <li><strong>3. Intersection</strong> : Test géométrique (Rayon vs Sphère).</li>
+                </ul>
+            </section>
+            
+            <section data-demo="lod">
+                <h2>5.3 Optimisation : LOD</h2>
+                <p>Level of Detail</p>
+                <ul style="font-size: 0.8em">
+                    <li>Loin = Peu de triangles.</li>
+                    <li>Près = Beaucoup de détails.</li>
+                    <li>Invisible à l'œil nu si bien fait.</li>
+                </ul>
+            </section>
+          </section>
+    
+        </div>
+      </div>
+      <div id="workbench-container"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
