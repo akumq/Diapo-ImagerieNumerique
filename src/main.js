@@ -38,7 +38,8 @@ const deck = new Reveal({
   embedded: true,
   controls: true,
   hash: true,
-  disableLayout: true
+  disableLayout: false,
+  center: true
 });
 
 deck.on('slidechanged', (event) => {
@@ -47,15 +48,24 @@ deck.on('slidechanged', (event) => {
 
 function updateSlide(slide) {
     const demoId = slide.dataset.demo;
+    const slidesContainer = document.getElementById('slides-container');
     
     if (demoId && demos[demoId]) {
+        // Show workbench
+        workbenchContainer.style.display = 'block';
+        slidesContainer.style.flex = '1';
+        
         const isSameDemo = workbench.currentDemo instanceof demos[demoId];
         
         if (!isSameDemo) {
             workbench.loadDemo(new demos[demoId](workbench.renderer));
         }
     } else {
+        // Hide workbench
         workbench.disposeCurrent();
+        workbenchContainer.style.display = 'none';
+        slidesContainer.style.flex = 'none';
+        slidesContainer.style.width = '100%';
     }
 
 

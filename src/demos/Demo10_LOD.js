@@ -63,9 +63,9 @@ export class Demo10_LOD {
 
     updateLabel() {
         const dist = this.camera.position.z;
-        if (dist < 8) this.params.level = "Haute (Rouge) - > 8000 tris";
-        else if (dist < 15) this.params.level = "Moyenne (Jaune) - ~300 tris";
-        else this.params.level = "Basse (Verte) - 20 tris";
+        if (dist < 8) this.params.level = "Haute (Rouge) - 1280 triangles";
+        else if (dist < 15) this.params.level = "Moyenne (Jaune) - 80 triangles";
+        else this.params.level = "Basse (Verte) - 20 triangles";
         
         this.infoController.updateDisplay();
     }
@@ -87,10 +87,15 @@ export class Demo10_LOD {
 
     dispose() {
         this.gui.destroy();
-        // Traverse LOD to dispose
-        this.lod.children.forEach(c => {
-            if(c.geometry) c.geometry.dispose();
-            if(c.material) c.material.dispose();
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
         });
     }
 }

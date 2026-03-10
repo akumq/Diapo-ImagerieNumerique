@@ -31,6 +31,8 @@ body {
   position: relative;
   overflow: hidden;
   border-right: 1px solid #333;
+  display: flex;
+  align-items: center; /* Center Reveal vertically */
 }
 
 #workbench-container {
@@ -48,4 +50,5 @@ body {
 
 .reveal .slides {
   text-align: left;
+  /* Centering handled by Reveal.js initialize unless disableLayout is true */
 }
