@@ -14,9 +14,11 @@ import { Demo7_PBR } from './demos/Demo7_PBR.js'
 import { Demo8_Raytracing } from './demos/Demo8_Raytracing.js'
 import { Demo9_Picking } from './demos/Demo9_Picking.js'
 import { Demo10_LOD } from './demos/Demo10_LOD.js'
+import { Demo11_Rasterization } from './demos/Demo11_Rasterization.js'
 
 
 const workbenchContainer = document.getElementById('workbench-container');
+const slidesContainer = document.getElementById('slides-container');
 const workbench = new Workbench(workbenchContainer);
 
 const demos = {
@@ -30,16 +32,29 @@ const demos = {
     'pbr': Demo7_PBR,
     'raytracing': Demo8_Raytracing,
     'picking': Demo9_Picking,
-    'lod': Demo10_LOD
+    'lod': Demo10_LOD,
+    'rasterization-detail': Demo11_Rasterization
 };
 
 
 const deck = new Reveal({
   embedded: true,
+  // Désactiver le scaling automatique pour garder la même taille de police
+  width: "100%",
+  height: "100%",
+  margin: 0.1,
+  minScale: 1,
+  maxScale: 1,
+  
   controls: true,
+  progress: true,
+  slideNumber: 'c/t',
   hash: true,
+  transition: 'slide',
+  backgroundTransition: 'fade',
   disableLayout: false,
-  center: true
+  center: true,
+  mouseWheel: true
 });
 
 deck.on('slidechanged', (event) => {
@@ -48,26 +63,24 @@ deck.on('slidechanged', (event) => {
 
 function updateSlide(slide) {
     const demoId = slide.dataset.demo;
-    const slidesContainer = document.getElementById('slides-container');
     
     if (demoId && demos[demoId]) {
-        // Show workbench
+        // Mode split : Slides (50%) + Demo (50%)
         workbenchContainer.style.display = 'block';
+        workbenchContainer.style.flex = '1';
         slidesContainer.style.flex = '1';
         
         const isSameDemo = workbench.currentDemo instanceof demos[demoId];
-        
         if (!isSameDemo) {
             workbench.loadDemo(new demos[demoId](workbench.renderer));
         }
     } else {
-        // Hide workbench
+        // Mode plein écran : Slides (100%)
         workbench.disposeCurrent();
         workbenchContainer.style.display = 'none';
-        slidesContainer.style.flex = 'none';
-        slidesContainer.style.width = '100%';
+        workbenchContainer.style.flex = '0';
+        slidesContainer.style.flex = '1';
     }
-
 
     if (slide.dataset.stage && workbench.currentDemo && workbench.currentDemo.setStage) {
         workbench.currentDemo.setStage(slide.dataset.stage);
