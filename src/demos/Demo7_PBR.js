@@ -4,20 +4,35 @@ import GUI from 'lil-gui';
 export class Demo7_PBR {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x020205); // Deep space
+        
+        // Texture Loader
+        const loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('anonymous');
+
+        // Load Space Background
+        loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/galaxy_starfield.png', (texture) => {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            this.scene.background = texture;
+        });
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 6);
 
         // Stronger lighting for PBR
-        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.7); 
         this.scene.add(ambient);
+
+        // Add a very strong Sun light
+        const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
+        sunLight.position.set(5, 5, 10);
+        this.scene.add(sunLight);
 
         this.pointLights = [];
         const lightConfigs = [
-            { col: 0xffffff, pos: [10, 10, 10], int: 50 },
-            { col: 0x4444ff, pos: [-10, 0, 5], int: 30 },
-            { col: 0xffaa00, pos: [10, -5, 5], int: 30 }
+            { col: 0xffffff, pos: [10, 10, 10], int: 500 }, 
+            { col: 0x4444ff, pos: [-10, 0, 5], int: 300 },  
+            { col: 0xffaa00, pos: [10, -5, 5], int: 300 }   
         ];
 
         lightConfigs.forEach(cfg => {
@@ -26,10 +41,6 @@ export class Demo7_PBR {
             this.scene.add(l);
             this.pointLights.push(l);
         });
-
-        // Texture Loader
-        const loader = new THREE.TextureLoader();
-        loader.setCrossOrigin('anonymous');
 
         // Earth Textures - High Reliability
         const earthAlbedo = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg';

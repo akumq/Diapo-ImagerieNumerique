@@ -15,6 +15,8 @@ import { Demo8_Raytracing } from './demos/Demo8_Raytracing.js'
 import { Demo9_Picking } from './demos/Demo9_Picking.js'
 import { Demo10_LOD } from './demos/Demo10_LOD.js'
 import { Demo11_Rasterization } from './demos/Demo11_Rasterization.js'
+import { Demo12_GPUArchitecture } from './demos/Demo12_GPUArchitecture.js'
+import { Demo13_MultiplayerSync } from './demos/Demo13_MultiplayerSync.js'
 
 
 const workbenchContainer = document.getElementById('workbench-container');
@@ -33,7 +35,9 @@ const demos = {
     'raytracing': Demo8_Raytracing,
     'picking': Demo9_Picking,
     'lod': Demo10_LOD,
-    'rasterization-detail': Demo11_Rasterization
+    'rasterization-detail': Demo11_Rasterization,
+    'gpu-architecture': Demo12_GPUArchitecture,
+    'distributed': Demo13_MultiplayerSync
 };
 
 

@@ -8,11 +8,13 @@ Ce plan suit une progression logique allant de l'outil (Three.js) à la structur
 ### PARTIE 1 : L'écosystème Three.js
 *Objectif : Comprendre pourquoi on utilise un moteur de rendu plutôt que de coder directement pour la carte graphique.*
 
-
 **[Note] L'objectif est de faire en sorte de présenter Threejs et les raison pour laquelle ça existe**
 
 * **1.0 Introduction** : Standard de la 3D Web depuis 2010.
 * **1.1 Philosophie d'Abstraction** : Simplifier la complexité, gestion automatique du matériel, approche orientée "Objets".
+
+
+
 * **1.2 Anatomie d'une Application** :
     * **Scène** : Le plateau de tournage.
     * **Caméra** : Le point de vue.

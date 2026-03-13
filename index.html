@@ -190,10 +190,44 @@
             </section>
           </section>
 
-          <!-- PARTIE 4 : LUMIÈRE & MATIÈRE -->
+          <!-- PARTIE 4 : L'ARCHITECTURE GPU -->
+          <section>
+            <section data-demo="gpu-architecture" data-stage="parallel">
+                <h2>4.1 Pourquoi le GPU ?</h2>
+                <p>Le secret : Le parallélisme massif.</p>
+                <ul style="font-size: 0.7em">
+                    <li><strong>CPU (Cerveau)</strong> : Quelques cœurs très rapides, optimisés pour des tâches séquentielles complexes.</li>
+                    <li><strong>GPU (Muscles)</strong> : Des milliers de petits cœurs optimisés pour faire la même opération simple sur des millions de données (SIMD).</li>
+                    <li><strong>Analogie</strong> : 10 génies (CPU) vs 10 000 ouvriers spécialisés (GPU).</li>
+                </ul>
+            </section>
+
+            <section data-demo="gpu-architecture" data-stage="vram">
+                <h2>4.2 La Mémoire Vidéo (VRAM)</h2>
+                <p>Le stockage haute performance.</p>
+                <ul style="font-size: 0.7em">
+                    <li><strong>Bande passante</strong> : La VRAM est beaucoup plus rapide que la RAM classique pour le transfert de textures et de buffers.</li>
+                    <li><strong>Coût du transfert</strong> : Envoyer des données du CPU vers le GPU est "lent". On essaie de tout stocker sur le GPU une fois pour toutes.</li>
+                    <li><strong>Draw Calls</strong> : Chaque commande de dessin a un coût de communication (overhead).</li>
+                </ul>
+            </section>
+
+            <section data-demo="gpu-architecture" data-stage="shader">
+                <h2>4.3 Les Shaders (GLSL)</h2>
+                <p>De petits programmes exécutés sur le GPU.</p>
+                <ul style="font-size: 0.7em">
+                    <li>Ce sont les "recettes" de cuisine envoyées au GPU.</li>
+                    <li><strong>Vertex Shader</strong> : S'exécute pour chaque sommet (géométrie).</li>
+                    <li><strong>Fragment Shader</strong> : S'exécute pour chaque pixel (couleur).</li>
+                    <li>Langage : <strong>GLSL</strong> (proche du C), compilé à la volée par la carte graphique.</li>
+                </ul>
+            </section>
+          </section>
+
+          <!-- PARTIE 5 : LUMIÈRE & MATIÈRE -->
           <section>
             <section data-demo="lighting">
-                <h2>4.1 Modèles d'Illumination (Lambert)</h2>
+                <h2>5.1 Modèles d'Illumination (Lambert)</h2>
                 <p>Réflexion diffuse idéale.</p>
                 <ul style="font-size: 0.7em" >
                     <li >L'intensité dépend de l'angle d'incidence.</li>
@@ -202,7 +236,7 @@
             </section>
 
             <section data-demo="pbr">
-                <h2>4.2 Rendu Physiquement Réaliste (PBR)</h2>
+                <h2>5.2 Rendu Physiquement Réaliste (PBR)</h2>
                 <p>Modèle microfacettes.</p>
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Albedo</strong> : Couleur de base.</li>
@@ -212,7 +246,7 @@
             </section>
 
             <section data-demo="raytracing">
-                <h2>4.3 Raytracing & Illumination Globale</h2>
+                <h2>5.3 Raytracing & Illumination Globale</h2>
                 <p>Simulation du parcours des rayons.</p>
                 <ul style="font-size: 0.7em" >
                     <li >Alternative à la rastérisation.</li>
@@ -222,10 +256,10 @@
             </section>
           </section>
 
-          <!-- PARTIE 5 : INTERACTION & OPTIMISATION -->
+          <!-- PARTIE 6 : INTERACTION & OPTIMISATION -->
           <section>
             <section data-demo="picking">
-                <h2>5.1 Interaction : Raycasting</h2>
+                <h2>6.1 Interaction : Raycasting</h2>
                 <p>Du clic 2D vers l'objet 3D.</p>
                 <ul style="font-size: 0.7em" >
                     <li >Lancement d'un rayon depuis la caméra.</li>
@@ -234,7 +268,7 @@
             </section>
 
             <section data-demo="picking">
-                <h2>5.2 Mathématiques du Unproject</h2>
+                <h2>6.2 Mathématiques du Unproject</h2>
                 <ul style="font-size: 0.7em" >
                     <li >Mapping des coordonnées souris vers [-1, 1].</li>
                     <li >Inversion des matrices de Projection et de Vue.</li>
@@ -243,7 +277,7 @@
             </section>
             
             <section data-demo="lod">
-                <h2>5.3 Optimisation : LOD</h2>
+                <h2>6.3 Optimisation : LOD</h2>
                 <p>Level of Detail adaptatif.</p>
                 <ul style="font-size: 0.7em" >
                     <li >Remplacement du maillage selon la distance.</li>
@@ -252,6 +286,46 @@
             </section>
           </section>
 
+          <!-- PARTIE 7 : OUVERTURE - SYSTÈMES DISTRIBUÉS -->
+          <section>
+            <section data-demo="distributed">
+                <h2>7.1 La Synchronisation Visuelle</h2>
+                <p>Maintenir une image cohérente entre spectateurs.</p>
+                <ul style="font-size: 0.7em">
+                    <li><strong>Le Problème</strong> : Le réseau est instable (Jitter) et lent (Latence).</li>
+                    <li><strong>Désynchronisation</strong> : Si on affiche les données dès qu'elles arrivent, l'objet se téléporte.</li>
+                    <li><strong>Le Défi</strong> : Créer une illusion de fluidité à partir de données saccadées.</li>
+                </ul>
+            </section>
+
+            <section data-demo="distributed">
+                <h2>7.2 Snapshot Interpolation</h2>
+                <p>Voyager dans le passé pour voir le futur fluide.</p>
+                <ul style="font-size: 0.7em">
+                    <li><strong>Le Tampon (Buffer)</strong> : On n'affiche pas la position actuelle, mais on attend d'avoir 2 ou 3 positions d'avance.</li>
+                    <li><strong>Interpolation (LERP)</strong> : Le GPU calcule les positions intermédiaires entre deux messages réseau.</li>
+                    <li><strong>Coût</strong> : On voit le monde avec un léger retard (ex: 100ms), mais avec une fluidité parfaite.</li>
+                </ul>
+            </section>
+
+            <section data-demo="distributed">
+                <h2>7.3 Déterminisme et États Visuels</h2>
+                <p>S'assurer que 1+1 = 2 partout.</p>
+                <ul style="font-size: 0.7em">
+                    <li><strong>Simulation Déterministe</strong> : Si les clients ont le même code et les mêmes entrées, ils génèrent la même image.</li>
+                    <li><strong>Floating Point Inconsistency</strong> : Le défi des arrondis mathématiques différents selon les CPU/GPU.</li>
+                    <li><strong>Réconciliation</strong> : Le serveur envoie périodiquement l'état "vrai" pour corriger les dérives visuelles.</li>
+                </ul>
+            </section>
+
+            <section data-demo="distributed">
+                <h2>7.4 Conclusion : Vers l'Image Distribuée</h2>
+                <ul style="font-size: 0.7em">
+                    <li><strong>Cloud Rendering</strong> : Fusion de flux vidéo et de géométrie locale.</li>
+                    <li><strong>L'Image n'est plus un fichier</strong> : C'est un consensus distribué en temps réel.</li>
+                </ul>
+            </section>
+          </section>
         </div>
       </div>
       <div id="workbench-container"></div>
