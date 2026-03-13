@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 
 export class CubeDemo {
-    constructor() {
+    constructor(renderer) {
+        this.renderer = renderer;
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); // Aspects fixed on resize
         this.camera.position.z = 5;
@@ -33,10 +34,15 @@ export class CubeDemo {
     }
 
     dispose() {
-        // Cleanup geometries/materials
-        if (this.cube) {
-            this.cube.geometry.dispose();
-            this.cube.material.dispose();
-        }
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

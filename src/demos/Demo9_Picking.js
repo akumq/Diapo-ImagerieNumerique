@@ -237,13 +237,31 @@ export class Demo9_Picking {
         const fov = THREE.MathUtils.degToRad(this.virtualCamera.fov);
         const h = 2 * near * Math.tan(fov / 2);
         const w = h * this.virtualCamera.aspect;
+        
         this.screenPlane.geometry.dispose();
         this.screenPlane.geometry = new THREE.PlaneGeometry(w, h);
+        
+        // Update Wireframe Border
+        const screenWire = this.screenPlane.children.find(c => c instanceof THREE.LineSegments);
+        if (screenWire) {
+            screenWire.geometry.dispose();
+            screenWire.geometry = new THREE.EdgesGeometry(this.screenPlane.geometry);
+        }
     }
 
     dispose() {
         this.gui.destroy();
         this.canvas.removeEventListener('mousemove', this.onMouseMove);
-        // dispose geometries/materials
+        
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

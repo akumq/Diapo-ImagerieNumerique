@@ -4,51 +4,96 @@ import GUI from 'lil-gui';
 export class Demo7_PBR {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x000000);
+        this.scene.background = new THREE.Color(0x020205); // Deep space
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
-        this.camera.position.set(0, 0, 4);
+        this.camera.position.set(0, 0, 6);
 
-        // Env Maps / Lighting
-        // Standard setup for PBR
-        const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+        // Stronger lighting for PBR
+        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambient);
 
-        const pointLight = new THREE.PointLight(0xffffff, 1);
-        pointLight.position.set(5, 5, 5);
-        this.scene.add(pointLight);
-        
-        const blueLight = new THREE.PointLight(0x4444ff, 2);
-        blueLight.position.set(-5, 0, 2);
-        this.scene.add(blueLight);
+        this.pointLights = [];
+        const lightConfigs = [
+            { col: 0xffffff, pos: [10, 10, 10], int: 50 },
+            { col: 0x4444ff, pos: [-10, 0, 5], int: 30 },
+            { col: 0xffaa00, pos: [10, -5, 5], int: 30 }
+        ];
 
-        const orangeLight = new THREE.PointLight(0xffaa00, 2);
-        orangeLight.position.set(5, -2, 2);
-        this.scene.add(orangeLight);
+        lightConfigs.forEach(cfg => {
+            const l = new THREE.PointLight(cfg.col, cfg.int);
+            l.position.set(...cfg.pos);
+            this.scene.add(l);
+            this.pointLights.push(l);
+        });
 
-        // Procedural Textures
-        const textures = this.createProceduralTextures();
+        // Texture Loader
+        const loader = new THREE.TextureLoader();
+        loader.setCrossOrigin('anonymous');
+
+        // Earth Textures - High Reliability
+        const earthAlbedo = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg';
+        const earthNormal = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_normal_2048.jpg';
+
+        // Procedural Textures for the UV Grid
+        const proceduralMaps = this.createProceduralTextures();
+
         this.maps = {
-            none: null,
-            albedo: textures.albedo,
-            normal: textures.normal,
-            roughness: textures.roughness
+            albedo: loader.load(earthAlbedo, (t) => { t.needsUpdate = true; }),
+            normal: loader.load(earthNormal, (t) => { t.needsUpdate = true; }),
+            roughness: loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_specular_2048.jpg'),
+            uvGrid: proceduralMaps.uvGrid
         };
 
-        // Material
-        this.material = new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            metalness: 0.7,
-            roughness: 0.2,
+        // Materials
+        this.pbrMaterial = new THREE.MeshStandardMaterial({
+            color: 0xaaaaaa, // Non-black fallback
+            metalness: 0.0,
+            roughness: 0.9,
             map: this.maps.albedo,
             normalMap: this.maps.normal,
             roughnessMap: this.maps.roughness
         });
+        this.pbrMaterial.normalScale.set(1.5, 1.5);
+
+        // Debug material to show RAW maps
+        this.debugMaterial = new THREE.MeshBasicMaterial({ map: this.maps.albedo });
 
         // Object
-        const geometry = new THREE.SphereGeometry(1.5, 128, 128); // High poly for good lighting
-        this.mesh = new THREE.Mesh(geometry, this.material);
+        this.geometry = new THREE.SphereGeometry(1.5, 64, 32);
+        this.mesh = new THREE.Mesh(this.geometry, this.pbrMaterial);
         this.scene.add(this.mesh);
+
+        // Static Plane (Texture Preview)
+        this.planeGeometry = new THREE.PlaneGeometry(2, 2);
+        this.planeMaterial = new THREE.MeshBasicMaterial({ map: this.maps.albedo, side: THREE.DoubleSide });
+        this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
+        this.planeMesh.position.y = -2.5;
+        this.planeMesh.visible = false;
+        this.scene.add(this.planeMesh);
+
+        // UV Projection Wireframe
+        this.uvWire = new THREE.LineSegments(
+            new THREE.BufferGeometry(),
+            new THREE.LineBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.4 })
+        );
+        this.planeMesh.add(this.uvWire); // Relative to plane
+        this.uvWire.position.z = 0.01;
+
+        this.updateUVProjection();
+
+        // GUI State
+        this.params = {
+            viewMode: 'PBR Complet',
+            geometry: 'Sphère',
+            repeatX: 1,
+            repeatY: 1,
+            offsetX: 0,
+            offsetY: 0,
+            showPlane: false,
+            showUV: true,
+            rotate: true
+        };
 
         // GUI
         const container = document.getElementById('workbench-container');
@@ -57,120 +102,147 @@ export class Demo7_PBR {
         this.gui.domElement.style.top = '10px';
         this.gui.domElement.style.right = '10px';
 
-        this.gui.add(this.material, 'metalness', 0, 1).name('Métal (Metalness)');
-        this.gui.add(this.material, 'roughness', 0, 1).name('Rugosité (Roughness)');
-        this.gui.addColor(this.material, 'color').name('Couleur de Base');
+        this.gui.add(this.params, 'viewMode', [
+            'PBR Complet', 
+            'Albedo (Couleur)', 
+            'Normal Map (Relief)', 
+            'Roughness (Rugosité)', 
+            'Grille UV (Mapping)'
+        ]).name('Mode de Vue').onChange(v => this.updateViewMode(v));
 
-        const folderMaps = this.gui.addFolder('Textures (Maps)');
-        
-        const params = {
-            useAlbedo: true,
-            useNormal: true,
-            useRoughness: true
-        };
+        this.gui.add(this.params, 'geometry', ['Sphère', 'Tore']).name('Objet').onChange(v => this.updateGeometry(v));
 
-        folderMaps.add(params, 'useAlbedo').name('Albedo Map').onChange(v => {
-            this.material.map = v ? this.maps.albedo : null;
-            this.material.needsUpdate = true;
+        this.gui.add(this.params, 'showPlane').name('Afficher Texture 2D').onChange(v => {
+            this.planeMesh.visible = v;
+            this.camera.position.z = v ? 4 : 6;
+            this.camera.position.y = v ? -1.0 : 0;
+            this.camera.lookAt(0, v ? -1.2 : 0, 0);
+            this.updateUVProjection();
         });
 
-        folderMaps.add(params, 'useNormal').name('Normal Map').onChange(v => {
-            this.material.normalMap = v ? this.maps.normal : null;
-            this.material.needsUpdate = true;
+        this.gui.add(this.params, 'showUV').name('Projeter Vertices (UV)').onChange(v => {
+            this.uvWire.visible = v;
         });
 
-        folderMaps.add(params, 'useRoughness').name('Roughness Map').onChange(v => {
-            this.material.roughnessMap = v ? this.maps.roughness : null;
-            this.material.needsUpdate = true;
-        });
+        const folderUV = this.gui.addFolder('Manipulation UV (Mapping)');
+        folderUV.add(this.params, 'repeatX', 0.1, 5).name('Répétition U (Tile)').onChange(() => this.updateUVs());
+        folderUV.add(this.params, 'repeatY', 0.1, 5).name('Répétition V (Tile)').onChange(() => this.updateUVs());
+        folderUV.add(this.params, 'offsetX', 0, 1).name('Décalage U (Offset)').onChange(() => this.updateUVs());
+        folderUV.add(this.params, 'offsetY', 0, 1).name('Décalage V (Offset)').onChange(() => this.updateUVs());
+        folderUV.open();
+
+        this.gui.add(this.params, 'rotate').name('Rotation Auto');
     }
 
     createProceduralTextures() {
         const width = 512, height = 512;
         
-        // 1. Albedo (Color Pattern) - Checkerboard
-        const canvasAlbedo = document.createElement('canvas');
-        canvasAlbedo.width = width; canvasAlbedo.height = height;
-        const ctxA = canvasAlbedo.getContext('2d');
-        ctxA.fillStyle = '#ffffff';
-        ctxA.fillRect(0, 0, width, height);
-        ctxA.fillStyle = '#aaaaaa';
-        const tiles = 8;
-        const tileSize = width / tiles;
-        for(let y=0; y<tiles; y++) {
-            for(let x=0; x<tiles; x++) {
-                if((x+y)%2 === 0) ctxA.fillRect(x*tileSize, y*tileSize, tileSize, tileSize);
+        // Helper to create canvas texture
+        const createCanvas = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = width; canvas.height = height;
+            return { canvas, ctx: canvas.getContext('2d') };
+        };
+
+        // UV Grid (Educational)
+        const { canvas: cU, ctx: ctxU } = createCanvas();
+        ctxU.fillStyle = '#222'; ctxU.fillRect(0,0,width,height);
+        ctxU.strokeStyle = '#00ff00'; ctxU.lineWidth = 2;
+        const steps = 8;
+        const stepSize = width / steps;
+        for(let i=0; i<=steps; i++) {
+            // Lines
+            ctxU.beginPath(); ctxU.moveTo(i*stepSize, 0); ctxU.lineTo(i*stepSize, height); ctxU.stroke();
+            ctxU.beginPath(); ctxU.moveTo(0, i*stepSize); ctxU.lineTo(width, i*stepSize); ctxU.stroke();
+            // Labels
+            for(let j=0; j<steps; j++) {
+                ctxU.fillStyle = '#0f0'; ctxU.font = '16px Arial';
+                ctxU.fillText(`U:${(i/steps).toFixed(1)}`, i*stepSize + 5, j*stepSize + 20);
+                ctxU.fillText(`V:${(1-j/steps).toFixed(1)}`, i*stepSize + 5, j*stepSize + 40);
             }
         }
-        const texAlbedo = new THREE.CanvasTexture(canvasAlbedo);
+        const texUV = new THREE.CanvasTexture(cU);
 
-        // 2. Normal Map (Pseudo-relief)
-        // We want the checker squares to look slightly raised or have edges.
-        // Simple normal map strategy: 
-        // Base color (128, 128, 255) = Flat vertical normal.
-        // We'll add some "bevel" color gradients to edges.
-        const canvasNormal = document.createElement('canvas');
-        canvasNormal.width = width; canvasNormal.height = height;
-        const ctxN = canvasNormal.getContext('2d');
-        ctxN.fillStyle = 'rgb(128, 128, 255)'; // Flat normal
-        ctxN.fillRect(0, 0, width, height);
+        return { uvGrid: texUV };
+    }
+
+    updateViewMode(mode) {
+        // Toggle lights visibility based on mode (PBR needs lights, RAW doesn't)
+        const isPBR = mode === 'PBR Complet';
+        this.pointLights.forEach(l => l.visible = isPBR);
+
+        if (isPBR) {
+            this.mesh.material = this.pbrMaterial;
+            this.planeMaterial.map = this.maps.albedo; // Show albedo in PBR mode
+        } else {
+            this.mesh.material = this.debugMaterial;
+            switch(mode) {
+                case 'Albedo (Couleur)': this.debugMaterial.map = this.maps.albedo; break;
+                case 'Normal Map (Relief)': this.debugMaterial.map = this.maps.normal; break;
+                case 'Roughness (Rugosité)': this.debugMaterial.map = this.maps.roughness; break;
+                case 'Grille UV (Mapping)': this.debugMaterial.map = this.maps.uvGrid; break;
+            }
+            this.planeMaterial.map = this.debugMaterial.map;
+        }
+        this.mesh.material.needsUpdate = true;
+        this.planeMaterial.needsUpdate = true;
+    }
+
+    updateGeometry(type) {
+        this.geometry.dispose();
+        if (type === 'Sphère') this.geometry = new THREE.SphereGeometry(1.5, 64, 32);
+        else if (type === 'Tore') this.geometry = new THREE.TorusGeometry(1, 0.4, 32, 100);
+        this.mesh.geometry = this.geometry;
+        this.updateUVProjection();
+    }
+
+    updateUVProjection() {
+        if (!this.geometry) return;
+        const uvAttr = this.geometry.attributes.uv;
+        const indexAttr = this.geometry.index;
+        if (!uvAttr) return;
+
+        const points = [];
         
-        // Draw bevels
-        // Simplification: Just draw lines at tile boundaries with different normal colors
-        // Left edge of tile = pointing Left (R < 128)
-        // Right edge = pointing Right (R > 128)
-        // Top edge = pointing Up (G > 128)
-        // Bottom edge = pointing Down (G < 128)
-        
-        const bevel = 4;
-        for(let y=0; y<tiles; y++) {
-            for(let x=0; x<tiles; x++) {
-                const px = x * tileSize;
-                const py = y * tileSize;
-                
-                // We'll just make the "grey" tiles pop out.
-                if ((x+y)%2 === 0) {
-                   // Top edge (Green > 128)
-                   ctxN.fillStyle = 'rgb(128, 200, 255)'; 
-                   ctxN.fillRect(px, py, tileSize, bevel);
-                   // Bottom edge (Green < 128)
-                   ctxN.fillStyle = 'rgb(128, 50, 255)'; 
-                   ctxN.fillRect(px, py + tileSize - bevel, tileSize, bevel);
-                   // Left edge (Red < 128)
-                   ctxN.fillStyle = 'rgb(50, 128, 255)'; 
-                   ctxN.fillRect(px, py, bevel, tileSize);
-                   // Right edge (Red > 128)
-                   ctxN.fillStyle = 'rgb(200, 128, 255)'; 
-                   ctxN.fillRect(px + tileSize - bevel, py, bevel, tileSize);
-                }
+        // Function to get vertex UV and map it to Plane space (-1 to 1)
+        const getPoint = (idx) => {
+            const u = uvAttr.getX(idx);
+            const v = uvAttr.getY(idx);
+            return new THREE.Vector3(u * 2 - 1, v * 2 - 1, 0);
+        };
+
+        if (indexAttr) {
+            for (let i = 0; i < indexAttr.count; i += 3) {
+                const a = indexAttr.getX(i);
+                const b = indexAttr.getX(i + 1);
+                const c = indexAttr.getX(i + 2);
+                const pA = getPoint(a); const pB = getPoint(b); const pC = getPoint(c);
+                points.push(pA, pB, pB, pC, pC, pA);
+            }
+        } else {
+            for (let i = 0; i < uvAttr.count; i += 3) {
+                const pA = getPoint(i); const pB = getPoint(i + 1); const pC = getPoint(i + 2);
+                points.push(pA, pB, pB, pC, pC, pA);
             }
         }
-        const texNormal = new THREE.CanvasTexture(canvasNormal);
 
-        // 3. Roughness Map
-        // Let's make the white squares smooth (black) and grey squares rough (white)
-        const canvasRough = document.createElement('canvas');
-        canvasRough.width = width; canvasRough.height = height;
-        const ctxR = canvasRough.getContext('2d');
-        ctxR.fillStyle = '#111111'; // Smoothish default
-        ctxR.fillRect(0, 0, width, height);
-        
-        for(let y=0; y<tiles; y++) {
-            for(let x=0; x<tiles; x++) {
-                if((x+y)%2 === 0) {
-                    ctxR.fillStyle = '#aaaaaa'; // Rougher
-                    ctxR.fillRect(x*tileSize, y*tileSize, tileSize, tileSize);
-                }
-            }
-        }
-        const texRough = new THREE.CanvasTexture(canvasRough);
+        this.uvWire.geometry.dispose();
+        this.uvWire.geometry = new THREE.BufferGeometry().setFromPoints(points);
+    }
 
-        return { albedo: texAlbedo, normal: texNormal, roughness: texRough };
+    updateUVs() {
+        const maps = Object.values(this.maps);
+        maps.forEach(map => {
+            map.repeat.set(this.params.repeatX, this.params.repeatY);
+            map.offset.set(this.params.offsetX, this.params.offsetY);
+        });
     }
 
     update() {
-        this.mesh.rotation.y += 0.002;
-        this.mesh.rotation.x += 0.001;
+        if (this.params.rotate) {
+            this.mesh.rotation.y += 0.005;
+            this.mesh.rotation.x += 0.002;
+        }
     }
 
     render(renderer) {
@@ -184,8 +256,13 @@ export class Demo7_PBR {
 
     dispose() {
         this.gui.destroy();
-        this.mesh.geometry.dispose();
-        this.material.dispose();
-        Object.values(this.maps).forEach(t => t?.dispose());
+        Object.values(this.maps).forEach(t => t.dispose());
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+                else obj.material.dispose();
+            }
+        });
     }
 }

@@ -103,8 +103,15 @@ export class Demo4_Lighting {
 
     dispose() {
         this.gui.destroy();
-        this.geometry?.dispose(); // geometry is local const but we rely on mesh.geometry disposal if we kept ref, here mesh owns it.
-        this.mesh.geometry.dispose();
-        this.material.dispose();
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

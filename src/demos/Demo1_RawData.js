@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { VertexNormalsHelper } from 'three/examples/jsm/helpers/VertexNormalsHelper.js';
+import { VertexNormalsHelper } from 'three/addons/helpers/VertexNormalsHelper.js';
 import GUI from 'lil-gui'; 
 
 export class Demo1_RawData {
@@ -46,7 +46,6 @@ export class Demo1_RawData {
         const fMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide, opacity: 1.0, transparent: false });
         this.faceHighlighter = new THREE.Mesh(fGeo, fMat);
         this.faceHighlighter.visible = false;
-        this.faceHighlighter.position.multiplyScalar(1.01); 
         this.scene.add(this.faceHighlighter);
 
 
@@ -84,12 +83,13 @@ export class Demo1_RawData {
 
         const folderGeo = this.gui.addFolder('Inspection');
         folderGeo.add(params, 'highlightVertex').name('Highlight Vertex').onChange(() => this.updateHighlights());
-        folderGeo.add(params, 'highlightFace').name('Highlight Face (Trigon)').onChange(() => this.updateHighlights());
+        folderGeo.add(params, 'highlightFace').name('Highlight Face (Triangle)').onChange(() => this.updateHighlights());
         folderGeo.add(params, 'vertexIndex', 0, 11, 1).name('Index Selector').step(1).onChange(() => this.updateHighlights()); 
         folderGeo.open();
 
         this.gui.add(params, 'autoRotate').name('Auto Rotate');
 
+        this.mesh.updateMatrixWorld();
         this.updateHighlights();
     }
 
@@ -196,11 +196,15 @@ export class Demo1_RawData {
 
     dispose() {
         this.gui.destroy();
-        this.geometry.dispose();
-        this.material.dispose();
-        this.vertexHighlighter.geometry.dispose();
-        this.vertexHighlighter.material.dispose();
-        this.faceHighlighter.geometry.dispose();
-        this.faceHighlighter.material.dispose();
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

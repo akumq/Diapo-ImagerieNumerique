@@ -177,7 +177,16 @@ export class Demo6_Camera {
     dispose() {
         this.gui.destroy();
         this.renderTarget.dispose();
-        this.bufferPlaneGeometry.dispose();
-        // ... dispose others
+        
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

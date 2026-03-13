@@ -81,7 +81,13 @@ export class Demo8_Raytracing {
         this.scene.add(new THREE.PointLightHelper(this.light, 0.2));
 
         // --- Ray Viz ---
-        this.rayLine = null;
+        this.rayLine = new THREE.Line(
+            new THREE.BufferGeometry(),
+            new THREE.LineBasicMaterial({ color: 0xffff00 })
+        );
+        this.rayLine.visible = false;
+        this.scene.add(this.rayLine);
+
         this.shadowRayLine = null;
         this.raycaster = new THREE.Raycaster();
         
@@ -99,10 +105,8 @@ export class Demo8_Raytracing {
         this.gui.domElement.style.top = '10px';
         this.gui.domElement.style.right = '10px';
         
-        this.gui.add(this.params, 'speed', 1, 600).name('Vitesse Simulation');
+        this.gui.add(this.params, 'speed', 1, 600).name('Rayons par frame');
         this.gui.add({ reset: () => this.reset() }, 'reset').name('Réinitialiser');
-
-        this.raysToProcess = [];
     }
 
     reset() {
@@ -133,31 +137,23 @@ export class Demo8_Raytracing {
         let color = '#000000'; // Void color
 
         // Visual Ray
-        if (this.rayLine) this.scene.remove(this.rayLine);
-        
         // Limit ray length for visual
         const rayLength = intersects.length > 0 ? intersects[0].distance : 10;
         const endPoint = new THREE.Vector3().copy(eyePos).add(dir.multiplyScalar(rayLength));
         
-        const geometry = new THREE.BufferGeometry().setFromPoints([eyePos, endPoint]);
-        const material = new THREE.LineBasicMaterial({ color: 0xffff00 });
-        this.rayLine = new THREE.Line(geometry, material);
-        this.scene.add(this.rayLine);
+        this.rayLine.geometry.setFromPoints([eyePos, endPoint]);
+        this.rayLine.visible = true;
 
         if (intersects.length > 0) {
             const hit = intersects[0];
             const objColor = hit.object.material.color;
             
             // Simple lighting: Dot(Normal, LightDir)
-            // Shadow check?
+            // Transform face normal to World Space
+            const worldNormal = hit.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld));
             const lightDir = new THREE.Vector3().subVectors(this.light.position, hit.point).normalize();
             
-            // Cast shadow ray
-            const shadowRay = new THREE.Raycaster(hit.point.clone().add(hit.face.normal.clone().multiplyScalar(0.01)), lightDir);
-            // Check collision with other objects roughly? 
-            // For now just basic shading to keep demo fast and stable.
-            
-            const dot = Math.max(0, hit.face.normal.dot(lightDir));
+            const dot = Math.max(0, worldNormal.dot(lightDir));
             
             // Color logic
             const r = Math.floor(objColor.r * 255 * dot);
@@ -174,15 +170,10 @@ export class Demo8_Raytracing {
 
     update() {
         // Shoot N rays per frame based on speed
-        // 60FPS -> Speed/60 rays per frame?
-        const count = Math.ceil(this.params.speed / 10); // ballpark
+        const count = Math.ceil(this.params.speed / 10); 
         for(let i=0; i<count; i++) {
             this.shootRay();
         }
-        
-        // Rotate objects slightly to show it's "live" but slow accumulation?
-        // No, raytracing demo usually static scene is better to fill image.
-        // But maybe move light?
     }
 
     render(renderer) {
@@ -197,7 +188,16 @@ export class Demo8_Raytracing {
     dispose() {
         this.gui.destroy();
         this.screenTexture.dispose();
-        // clear lines
-        if(this.rayLine) this.scene.remove(this.rayLine);
+        
+        this.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+                if (Array.isArray(obj.material)) {
+                    obj.material.forEach(m => m.dispose());
+                } else {
+                    obj.material.dispose();
+                }
+            }
+        });
     }
 }

@@ -1,10 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>webgl-workshop</title>
+    <style>
+      .concept-box { background: #222; padding: 15px; border-radius: 8px; border-left: 5px solid #44ff44; }
+      .fragment-list li { margin-bottom: 0.5em; }
+      .step-title { color: #ffaa00; font-weight: bold; }
+      .future-topic { color: #ffaa00 !important; font-weight: bold; }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -12,175 +18,240 @@
         <div class="slides">
 
           <section data-demo="cube">
-            <h2>Fondamentaux de la 3D</h2>
-            <p>Atelier Interactif</p>
+            <h2>Synthèse d'Image 3D</h2>
+            <p>Fondements Mathématiques et Architecture de Rendu</p>
+            <p style="font-size: 0.6em; color: #888;">Approche Conceptuelle avec Three.js</p>
           </section>
           
-
+          <!-- PARTIE 1 : L'ÉCOSYSTÈME THREE.JS -->
           <section>
-            <section data-demo="raw-data">
-                <h2>1.1 Géométrie & Maillage</h2>
-                <p>L'Atome de la 3D : <strong>Le Triangle</strong></p>
-                <ul style="font-size: 0.8em">
-                    <li><strong>Vertex</strong> : Position + Données</li>
-                    <li><strong>Face</strong> : Surface</li>
+            <section>
+                <h2>L'écosystème Three.js</h2>
+                <p>Abstraction et standardisation du rendu Web.</p>
+                <ul style="font-size: 0.8em" >
+                    <li >Créée en <strong>2010</strong>, c'est le standard pour la 3D sur le Web.</li>
+                    <li >Permet d'utiliser la puissance du GPU sans complexité inutile.</li>
+                    <li >Compatible avec <span class="future-topic">WebGL et WebGPU</span>.</li>
                 </ul>
             </section>
-            
+
+            <section>
+                <h2>1. Philosophie d'Abstraction</h2>
+                <p>Simplifier la complexité technique.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Réduction du code</strong> : On écrit "ajouter un cube" plutôt que de configurer manuellement la VRAM.</li>
+                    <li ><strong>Interopérabilité</strong> : Le moteur gère les différences entre les types de cartes graphiques.</li>
+                    <li ><strong>Approche Objet</strong> : Manipulation de concepts visuels (Caméras, Lumières) plutôt que de registres.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>2. Anatomie d'une Application</h2>
+                <p>Les quatre piliers fondamentaux.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Scene</strong> : L'espace (le "plateau de tournage") qui contient tout.</li>
+                    <li ><strong>Camera</strong> : Le point de vue qui définit la projection.</li>
+                    <li ><strong>Renderer</strong> : Le moteur qui transforme le graphe d'objets en pixels.</li>
+                    <li ><strong>Objects</strong> : Combinaison d'une géométrie (forme) et d'un matériau (apparence).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. Le Cycle de Rendu (Loop)</h2>
+                <p>Synchronisation avec l'écran.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Animation Frame</strong> : Le navigateur demande un dessin 60 fois par seconde.</li>
+                    <li ><strong>Mise à jour d'état</strong> : On modifie les propriétés juste avant de dessiner.</li>
+                    <li ><strong>Le Dessin</strong> : Un appel unique qui transforme tout le décor en pixels.</li>
+                </ul>
+            </section>
+          </section>
+
+          <!-- PARTIE 2 : STRUCTURE & GÉOMÉTRIE -->
+          <section>
             <section data-demo="raw-data">
-                <h2>1.2 Normales & Culling</h2>
-                <p>Orientation & Optimisation</p>
-                <ul style="font-size: 0.8em">
-                    <li><strong>Normale</strong> : Vecteur indiquant "où regarde" la face.</li>
-                    <li><strong>Backface Culling</strong> : On ne dessine pas l'arrière !</li>
+                <h2>2.1 Structure des Objets 3D</h2>
+                <p>La discrétisation des surfaces.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>VBO (Vertex Buffer Object)</strong> : Les sommets stockés en mémoire vidéo.</li>
+                    <li ><strong>Le Maillage</strong> : La surface formée par les triangles (optimisation GPU).</li>
+                    <li ><strong>La Normale</strong> : Vecteur essentiel pour le calcul de l'illumination.</li>
                 </ul>
             </section>
 
             <section data-demo="transform">
-                <h2>1.3 Transformations</h2>
-                <p><strong>Les Matrices</strong> déplacent le monde.</p>
-                <ul>
-                    <li>Translation, Rotation, Échelle</li>
+                <h2>2.2 Algèbre Linéaire & Transformations</h2>
+                <p>Passage de l'espace 3D aux coordonnées homogènes.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Translation, Rotation, Échelle</strong> : Manipulations de base.</li>
+                    <li ><strong>Matrices 4x4</strong> : Encodage linéaire de toutes les transformations.</li>
+                    <li ><strong>Quaternions</strong> : Utilisation pour éviter le <em>Gimbal Lock</em> en rotation.</li>
                 </ul>
             </section>
-    
-            <section data-demo="scenegraph">
-                <h2>1.4 Hiérarchie (Scene Graph)</h2>
-                <p>Combinaison de Matrices</p>
-                <ul style="font-size: 0.8em">
-                    <li>Le <strong>Bras</strong> hérite du mouvement de l'<strong>Épaule</strong>.</li>
+
+            <section data-demo="transform">
+                <h2>2.3 La Matrice : L'outil Universel</h2>
+                <p>Efficacité et Composition.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Condensation</strong> : 16 chiffres stockent l'état spatial complet.</li>
+                    <li ><strong>Composition</strong> : On multiplie les matrices pour combiner les mouvements.</li>
+                    <li ><strong>GPU</strong> : Architecture optimisée pour le calcul matriciel massif.</li>
                 </ul>
-                <p style="color: #ffaa00">"Matrice Monde = Parent x Locale"</p>
+            </section>
+
+            <section data-demo="scenegraph">
+                <h2>2.4 Le Graphe de Scène</h2>
+                <p>Hiérarchie et Propagation.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Parentalité</strong> : Les mouvements des parents s'appliquent aux enfants.</li>
+                    <li ><strong>Matrices Locales vs Monde</strong> : Calcul relatif des positions.</li>
+                    <li  style="color: #ffaa00">"Matrice Monde = Parent x Locale"</li>
+                </ul>
+            </section>
+
+            <section data-demo="camera">
+                <h2>2.5 Caméras et Projection</h2>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Perspective</strong> : Simulation de l'œil humain (Point de fuite).</li>
+                    <li ><strong>Orthographique</strong> : Vision technique (Parallèle, sans déformation).</li>
+                </ul>
             </section>
           </section>
-    
 
+          <!-- PARTIE 3 : LE PIPELINE DE RENDU -->
           <section>
             <section data-demo="pipeline" data-stage="intro">
-                <h2>2.0 Le Pipeline Graphique</h2>
-                <p>Vue d'ensemble Complète</p>
+                <h2>3.0 Le Pipeline Graphique Programmable</h2>
+                <p>Le voyage de la donnée vers le pixel.</p>
             </section>
     
             <section data-demo="pipeline" data-stage="application">
-                <h2>2.1 Étape Application (CPU)</h2>
-                <p>Envoi des Données du Modèle.</p>
-                <aside class="notes">Le CPU prépare les données.</aside>
+                <h2>3.1 Étape Application (CPU)</h2>
+                <ul style="font-size: 0.7em" >
+                    <li >Logique, physique et Culling (tri des objets visibles).</li>
+                    <li >Soumission des <strong>Draw Calls</strong> au GPU.</li>
+                    <li >Le principal goulot d'étranglement (Bottleneck).</li>
+                </ul>
             </section>
     
             <section data-demo="pipeline" data-stage="vertex">
-                <h2>2.2 Traitement des Vertex</h2>
-                <p>Positionnement des points.</p>
+                <h2>3.2 Vertex Shader (GPU)</h2>
+                <p>Traitement par sommet.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Le GPU traite chaque point simultanément.</li>
+                    <li >Projection finale sur la surface de l'écran.</li>
+                </ul>
             </section>
-    
+
             <section data-demo="pipeline" data-stage="geometry">
-                <h2>2.3 Assemblage Géométrique</h2>
-                <p>Relier les points.</p>
+                <h2>3.3 Assemblage & Clipping</h2>
+                <p>Troncature géométrique.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Élimination des primitives hors du volume de vision.</li>
+                    <li >Division perspective (NDC).</li>
+                </ul>
             </section>
     
             <section data-demo="pipeline" data-stage="raster">
-                <h2>2.4 Rastérisation</h2>
-                <p>Transformer les formes en pixels.</p>
+                <h2>3.4 Rastérisation</h2>
+                <p>Discrétisation géométrie vers fragments.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Identification des pixels couverts par chaque triangle.</li>
+                    <li ><strong>Interpolation</strong> des données (couleurs, UV) sur la surface.</li>
+                </ul>
             </section>
-    
+
+            <section data-demo="rasterization-detail">
+                <h2>Vecteur vs Raster</h2>
+                <p>Le défi de la discrétisation.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Vecteur (Jaune)</strong> : Forme mathématique parfaite, résolution infinie.</li>
+                    <li ><strong>Raster (Vert)</strong> : Approximation par une grille de pixels.</li>
+                    <li ><strong>Aliasing</strong> : L'effet d'escalier dû à la résolution limitée.</li>
+                </ul>
+            </section>
+
             <section data-demo="pipeline" data-stage="fragment">
-                <h2>2.5 Fragment Shader</h2>
-                <p>Calcul de la Couleur & Lumière.</p>
+                <h2>3.5 Fragment Shader</h2>
+                <p>Calcul de l'illumination par pixel.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Échantillonnage des textures.</li>
+                    <li >Application des modèles de lumière.</li>
+                </ul>
             </section>
-    
+
             <section data-demo="pipeline" data-stage="screen">
-                <h2>2.6 Sortie Écran</h2>
-                <p>L'Image Finale.</p>
-            </section>
-          </section>
-    
-
-          <section>
-            <section data-demo="lighting">
-                <h2>3.1 Loi de Lambert</h2>
-                <p><strong>L'Angle d'Incidence</strong> est clé.</p>
-                <p style="font-size: 0.8em">"Une surface face à la lumière (90&deg;) reçoit 100% de l'énergie. Une surface rasante (0&deg;) n'en reçoit aucune."</p>
-                <p style="color: #ffaa00; font-family: monospace;">Intensité = N &middot; L</p>
-            </section>
-    
-            <section data-demo="raytracing">
-                <h2>3.2 Théorie du Raytracing</h2>
-                <p>Une alternative à la Rastérisation.</p>
-                <ul style="font-size: 0.8em">
-                    <li>Au lieu de projeter des triangles...</li>
-                    <li>On <strong>lance des rayons</strong> depuis l'œil vers la scène.</li>
-                    <li>Permet : Ombres, Réflexions et Réfractions réalistes "gratuitement".</li>
-                </ul>
-            </section>
-    
-            <section data-demo="lighting">
-                <h2>3.3 Types de Lumières</h2>
-                <ul>
-                    <li><strong>Directionnelle</strong> : Soleil</li>
-                    <li><strong>Ponctuelle</strong> : Ampoule</li>
-                    <li><strong>Ambiante</strong> : Lumière indirecte</li>
-                </ul>
-            </section>
-            <section data-demo="lighting">
-                <h2>3.4 Interaction Lumière-Matière</h2>
-                <ul>
-                    <li><strong>Diffuse</strong> : Surface mate</li>
-                    <li><strong>Spéculaire</strong> : Brillance</li>
+                <h2>3.6 Sortie Écran (ROP)</h2>
+                <p>Tests finaux et composition.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Z-Buffer Test</strong> : Gestion de la visibilité et profondeur.</li>
+                    <li ><strong>Blending</strong> : Mélange pour la transparence.</li>
                 </ul>
             </section>
           </section>
-    
 
+          <!-- PARTIE 4 : LUMIÈRE & MATIÈRE -->
           <section>
-            <section data-demo="camera">
-                <h2>4.1 Caméras et Projection</h2>
-                <ul style="font-size: 0.8em">
-                    <li><strong>Perspective</strong> : Vision humaine (Point de fuite).</li>
-                    <li><strong>Orthographique</strong> : Vision technique (Parallèle, sans déformation).</li>
+            <section data-demo="lighting">
+                <h2>4.1 Modèles d'Illumination (Lambert)</h2>
+                <p>Réflexion diffuse idéale.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >L'intensité dépend de l'angle d'incidence.</li>
+                    <li  style="color: #ffaa00; font-family: monospace;">Intensité = Normale &middot; Lumière</li>
                 </ul>
             </section>
-    
+
             <section data-demo="pbr">
-                <h2>4.2 Textures et Matériaux (PBR)</h2>
-                <p>Rendu Basé sur la Physique</p>
-                <ul style="font-size: 0.8em">
-                    <li><strong>Albedo</strong> : Couleur de base (Texture).</li>
-                    <li><strong>Normal Map</strong> : Simule du relief (Détails fins).</li>
-                    <li><strong>Roughness</strong> : Lisse ou Rugueux ?</li>
-                    <li><strong>Metalness</strong> : Métallique ou Diélectrique ?</li>
+                <h2>4.2 Rendu Physiquement Réaliste (PBR)</h2>
+                <p>Modèle microfacettes.</p>
+                <ul style="font-size: 0.7em" >
+                    <li ><strong>Albedo</strong> : Couleur de base.</li>
+                    <li ><strong>Roughness</strong> : Rugosité de la surface.</li>
+                    <li ><strong>Metalness</strong> : Comportement métallique.</li>
+                </ul>
+            </section>
+
+            <section data-demo="raytracing">
+                <h2>4.3 Raytracing & Illumination Globale</h2>
+                <p>Simulation du parcours des rayons.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Alternative à la rastérisation.</li>
+                    <li >Permet des reflets et ombres parfaits.</li>
+                    <li >Plus coûteux mais physiquement exact.</li>
                 </ul>
             </section>
           </section>
-    
 
+          <!-- PARTIE 5 : INTERACTION & OPTIMISATION -->
           <section>
             <section data-demo="picking">
-                <h2>5.1 Interaction (Concept)</h2>
-                <p>Le Défi : <strong>2D</strong> (Souris) &rarr; <strong>3D</strong> (Monde)</p>
-                <p>La solution : <strong>Le Raycasting</strong></p>
-                <p style="font-size: 0.8em">"Imaginez un laser qui part de la caméra et traverse le pixel de la souris."</p>
+                <h2>5.1 Interaction : Raycasting</h2>
+                <p>Du clic 2D vers l'objet 3D.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Lancement d'un rayon depuis la caméra.</li>
+                    <li >Test d'intersection avec la géométrie de la scène.</li>
+                </ul>
             </section>
-    
+
             <section data-demo="picking">
-                <h2>5.2 Interaction (Maths)</h2>
-                <ul style="font-size: 0.7em">
-                    <li><strong>1. Normalisation (NDC)</strong> : Coordonnées pixel &rarr; [-1, 1].</li>
-                    <li><strong>2. Unproject</strong> : On multiplie par l'inverse des matrices.</li>
-                    <li style="color: #ffaa00">Ray = P⁻¹ &times; V⁻¹ &times; ScreenPos</li>
-                    <li><strong>3. Intersection</strong> : Test géométrique (Rayon vs Sphère).</li>
+                <h2>5.2 Mathématiques du Unproject</h2>
+                <ul style="font-size: 0.7em" >
+                    <li >Mapping des coordonnées souris vers [-1, 1].</li>
+                    <li >Inversion des matrices de Projection et de Vue.</li>
+                    <li  style="color: #ffaa00">Ray = P⁻¹ &times; V⁻¹ &times; ScreenPos</li>
                 </ul>
             </section>
             
             <section data-demo="lod">
                 <h2>5.3 Optimisation : LOD</h2>
-                <p>Level of Detail</p>
-                <ul style="font-size: 0.8em">
-                    <li>Loin = Peu de triangles.</li>
-                    <li>Près = Beaucoup de détails.</li>
-                    <li>Invisible à l'œil nu si bien fait.</li>
+                <p>Level of Detail adaptatif.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Remplacement du maillage selon la distance.</li>
+                    <li >Préserve la fluidité sur les scènes complexes.</li>
                 </ul>
             </section>
           </section>
-    
+
         </div>
       </div>
       <div id="workbench-container"></div>
