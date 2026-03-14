@@ -18,11 +18,11 @@ RUN npm run build
 # Étape de production
 FROM nginx:stable-alpine AS production-stage
 
-# Copie des fichiers compilés depuis l'étape de build vers Nginx
+# Copie des fichiers compilés
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Copie d'une configuration Nginx personnalisée si nécessaire (optionnel)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copie d'une configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
