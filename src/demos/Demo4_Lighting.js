@@ -9,7 +9,6 @@ export class Demo4_Lighting {
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 5);
 
-        // Objects
         const geometry = new THREE.SphereGeometry(1.5, 64, 32);
         this.material = new THREE.MeshPhongMaterial({
             color: 0xffffff,
@@ -19,25 +18,23 @@ export class Demo4_Lighting {
         this.mesh = new THREE.Mesh(geometry, this.material);
         this.scene.add(this.mesh);
 
-        // Lights
+        // Lighting
         this.ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
         this.scene.add(this.ambientLight);
 
-        this.dirLight = new THREE.DirectionalLight(0xffaa00, 1); // Sun-like
+        this.dirLight = new THREE.DirectionalLight(0xffaa00, 1);
         this.dirLight.position.set(5, 5, 5);
         this.scene.add(this.dirLight);
 
-        this.pointLight = new THREE.PointLight(0x00aaff, 1, 10); // Bulb-like
+        this.pointLight = new THREE.PointLight(0x00aaff, 1, 10);
         this.pointLight.position.set(-5, 2, 5);
         this.scene.add(this.pointLight);
 
-        // Helper
         this.dirLightHelper = new THREE.DirectionalLightHelper(this.dirLight, 1);
         this.pointLightHelper = new THREE.PointLightHelper(this.pointLight, 0.5);
         this.scene.add(this.dirLightHelper);
         this.scene.add(this.pointLightHelper);
 
-        // State
         this.params = {
             ambientIntensity: 0.2,
             dirLightEnabled: true,
@@ -50,7 +47,6 @@ export class Demo4_Lighting {
             rotate: true
         };
 
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -87,7 +83,6 @@ export class Demo4_Lighting {
         if (this.params.rotate) {
             this.mesh.rotation.y += 0.005;
         }
-        // Update helpers if lights move (static here but good practice)
         this.dirLightHelper.update();
         this.pointLightHelper.update();
     }

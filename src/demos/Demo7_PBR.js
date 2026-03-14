@@ -5,11 +5,10 @@ export class Demo7_PBR {
     constructor(renderer) {
         this.scene = new THREE.Scene();
         
-        // Texture Loader
         const loader = new THREE.TextureLoader();
         loader.setCrossOrigin('anonymous');
 
-        // Load Space Background
+        // Space background
         loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/galaxy_starfield.png', (texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
             texture.colorSpace = THREE.SRGBColorSpace;
@@ -19,11 +18,10 @@ export class Demo7_PBR {
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 6);
 
-        // Stronger lighting for PBR
+        // Lighting
         const ambient = new THREE.AmbientLight(0xffffff, 0.7); 
         this.scene.add(ambient);
 
-        // Add a very strong Sun light
         const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
         sunLight.position.set(5, 5, 10);
         this.scene.add(sunLight);
@@ -42,11 +40,9 @@ export class Demo7_PBR {
             this.pointLights.push(l);
         });
 
-        // Earth Textures - High Reliability
         const earthAlbedo = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg';
         const earthNormal = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_normal_2048.jpg';
 
-        // Procedural Textures for the UV Grid
         const proceduralMaps = this.createProceduralTextures();
 
         this.maps = {
@@ -56,9 +52,8 @@ export class Demo7_PBR {
             uvGrid: proceduralMaps.uvGrid
         };
 
-        // Materials
         this.pbrMaterial = new THREE.MeshStandardMaterial({
-            color: 0xaaaaaa, // Non-black fallback
+            color: 0xaaaaaa,
             metalness: 0.0,
             roughness: 0.9,
             map: this.maps.albedo,
@@ -67,15 +62,13 @@ export class Demo7_PBR {
         });
         this.pbrMaterial.normalScale.set(1.5, 1.5);
 
-        // Debug material to show RAW maps
         this.debugMaterial = new THREE.MeshBasicMaterial({ map: this.maps.albedo });
 
-        // Object
         this.geometry = new THREE.SphereGeometry(1.5, 64, 32);
         this.mesh = new THREE.Mesh(this.geometry, this.pbrMaterial);
         this.scene.add(this.mesh);
 
-        // Static Plane (Texture Preview)
+        // Texture preview plane
         this.planeGeometry = new THREE.PlaneGeometry(2, 2);
         this.planeMaterial = new THREE.MeshBasicMaterial({ map: this.maps.albedo, side: THREE.DoubleSide });
         this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
@@ -83,17 +76,16 @@ export class Demo7_PBR {
         this.planeMesh.visible = false;
         this.scene.add(this.planeMesh);
 
-        // UV Projection Wireframe
+        // UV wireframe
         this.uvWire = new THREE.LineSegments(
             new THREE.BufferGeometry(),
             new THREE.LineBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.4 })
         );
-        this.planeMesh.add(this.uvWire); // Relative to plane
+        this.planeMesh.add(this.uvWire);
         this.uvWire.position.z = 0.01;
 
         this.updateUVProjection();
 
-        // GUI State
         this.params = {
             viewMode: 'PBR Complet',
             geometry: 'Sphère',
@@ -106,7 +98,6 @@ export class Demo7_PBR {
             rotate: true
         };
 
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -148,24 +139,21 @@ export class Demo7_PBR {
     createProceduralTextures() {
         const width = 512, height = 512;
         
-        // Helper to create canvas texture
         const createCanvas = () => {
             const canvas = document.createElement('canvas');
             canvas.width = width; canvas.height = height;
             return { canvas, ctx: canvas.getContext('2d') };
         };
 
-        // UV Grid (Educational)
+        // UV Grid
         const { canvas: cU, ctx: ctxU } = createCanvas();
         ctxU.fillStyle = '#222'; ctxU.fillRect(0,0,width,height);
         ctxU.strokeStyle = '#00ff00'; ctxU.lineWidth = 2;
         const steps = 8;
         const stepSize = width / steps;
         for(let i=0; i<=steps; i++) {
-            // Lines
             ctxU.beginPath(); ctxU.moveTo(i*stepSize, 0); ctxU.lineTo(i*stepSize, height); ctxU.stroke();
             ctxU.beginPath(); ctxU.moveTo(0, i*stepSize); ctxU.lineTo(width, i*stepSize); ctxU.stroke();
-            // Labels
             for(let j=0; j<steps; j++) {
                 ctxU.fillStyle = '#0f0'; ctxU.font = '16px Arial';
                 ctxU.fillText(`U:${(i/steps).toFixed(1)}`, i*stepSize + 5, j*stepSize + 20);
@@ -178,13 +166,12 @@ export class Demo7_PBR {
     }
 
     updateViewMode(mode) {
-        // Toggle lights visibility based on mode (PBR needs lights, RAW doesn't)
         const isPBR = mode === 'PBR Complet';
         this.pointLights.forEach(l => l.visible = isPBR);
 
         if (isPBR) {
             this.mesh.material = this.pbrMaterial;
-            this.planeMaterial.map = this.maps.albedo; // Show albedo in PBR mode
+            this.planeMaterial.map = this.maps.albedo;
         } else {
             this.mesh.material = this.debugMaterial;
             switch(mode) {
@@ -215,7 +202,6 @@ export class Demo7_PBR {
 
         const points = [];
         
-        // Function to get vertex UV and map it to Plane space (-1 to 1)
         const getPoint = (idx) => {
             const u = uvAttr.getX(idx);
             const v = uvAttr.getY(idx);

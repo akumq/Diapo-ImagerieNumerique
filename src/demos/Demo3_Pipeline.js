@@ -17,7 +17,7 @@ export class Demo3_Pipeline {
 
         this.geometry = new THREE.SphereGeometry(1.5, 32, 16); 
         
-        // Materials for different stages
+        // Materials
         this.materials = {
             application: new THREE.MeshBasicMaterial({ 
                 color: 0x888888, 
@@ -46,14 +46,11 @@ export class Demo3_Pipeline {
             })
         };
 
-        // We will switch the mesh or material.
-        // Points require Points object, Mesh requires Mesh object.
         this.pointsObj = new THREE.Points(this.geometry, this.materials.vertex);
         this.meshObj = new THREE.Mesh(this.geometry, this.materials.raster);
         
         this.currentObject = null;
         
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -78,7 +75,6 @@ export class Demo3_Pipeline {
             this.scene.remove(this.currentObject);
         }
         
-        // Default settings
         this.params.rotate = false;
         this.scene.background = new THREE.Color(0x000000);
 
@@ -97,36 +93,34 @@ export class Demo3_Pipeline {
 
             case 'vertex':
                 this.currentObject = this.pointsObj;
-                this.scene.background = new THREE.Color(0x001100); // Dark Green
+                this.scene.background = new THREE.Color(0x001100);
                 break;
             
             case 'geometry':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.geometry;
-                this.scene.background = new THREE.Color(0x110d00); // Dark Orange
+                this.scene.background = new THREE.Color(0x110d00);
                 break;
 
             case 'raster':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.raster;
-                this.scene.background = new THREE.Color(0x220000); // Dark Red
+                this.scene.background = new THREE.Color(0x220000);
                 break;
 
-            case 'lighting': // Backwards compatibility if needed, map to fragment
             case 'fragment':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.lighting;
-                this.scene.background = new THREE.Color(0x001122); // Dark Blue
+                this.scene.background = new THREE.Color(0x001122);
                 break;
 
             case 'screen':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.lighting;
-                this.scene.background = new THREE.Color(0x222222); // Neutral grey/final
+                this.scene.background = new THREE.Color(0x222222);
                 break;
         }
 
-        // Manage Table Overlay
         if (stage === 'application') {
             this.createTableOverlay();
         } else {
@@ -163,12 +157,11 @@ export class Demo3_Pipeline {
         table.style.maxHeight = '80vh';
         table.style.overflowY = 'auto';
 
-        let html = '<h3 style="margin-top:0; border-bottom:1px solid #444; padding-bottom:10px;">MÉMOIRE CPU : Tableau de Données Vertex</h3>';
+        let html = '<h3 style="margin-top:0; border-bottom:1px solid #444; padding-bottom:10px;">Vertex Data</h3>';
         html += '<table style="width:100%; border-collapse: collapse; text-align: right;">';
         html += '<tr style="color: #888;"><th>IDX</th><th>X</th><th>Y</th><th>Z</th></tr>';
 
         const posAttr = this.geometry.attributes.position;
-        // Show first 15 vertices
         for (let i = 0; i < 15; i++) {
             const x = posAttr.getX(i).toFixed(4);
             const y = posAttr.getY(i).toFixed(4);

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VertexNormalsHelper } from 'three/addons/helpers/VertexNormalsHelper.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui'; 
 
 export class Demo1_RawData {
@@ -10,6 +11,9 @@ export class Demo1_RawData {
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(3, 3, 5);
         this.camera.lookAt(0, 0, 0);
+        
+        this.controls = new OrbitControls(this.camera, renderer.domElement);
+        this.controls.enableDamping = true;
         
         const ambient = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambient);
@@ -39,17 +43,16 @@ export class Demo1_RawData {
         const vMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         this.vertexHighlighter = new THREE.Mesh(vGeo, vMat);
         this.vertexHighlighter.visible = false;
-        this.scene.add(this.vertexHighlighter);
+        this.mesh.add(this.vertexHighlighter);
 
         const fGeo = new THREE.BufferGeometry();
         fGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(9), 3));
         const fMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide, opacity: 1.0, transparent: false });
         this.faceHighlighter = new THREE.Mesh(fGeo, fMat);
         this.faceHighlighter.visible = false;
-        this.scene.add(this.faceHighlighter);
+        this.faceHighlighter.scale.multiplyScalar(1.02); // Offset for Z-fight
+        this.mesh.add(this.faceHighlighter);
 
-
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -105,7 +108,6 @@ export class Demo1_RawData {
 
         this.mesh.geometry = this.geometry;
         
-        // Re-create helper
         this.scene.remove(this.normalsHelper);
         this.normalsHelper = new VertexNormalsHelper(this.mesh, 0.5, 0xff0000);
         this.normalsHelper.visible = this.params.showNormals;
@@ -119,32 +121,27 @@ export class Demo1_RawData {
         const posAttribute = this.geometry.getAttribute('position');
         if (!posAttribute) return;
         
-        // Highlight Vertex
         this.vertexHighlighter.visible = this.params.highlightVertex;
         if (this.params.highlightVertex) {
             const vIndex = this.params.vertexIndex % posAttribute.count;
             const x = posAttribute.getX(vIndex);
             const y = posAttribute.getY(vIndex);
             const z = posAttribute.getZ(vIndex);
-            this.vertexHighlighter.position.set(x, y, z).applyMatrix4(this.mesh.matrixWorld);
+            this.vertexHighlighter.position.set(x, y, z);
         }
 
-        // Highlight Face
         this.faceHighlighter.visible = this.params.highlightFace;
         if (this.params.highlightFace) {
             const indexAttribute = this.geometry.index;
             let a, b, c;
 
             if (indexAttribute) {
-                 // Indexed Geometry
-                 // Safe check for count
                  const totalFaces = indexAttribute.count / 3;
                  const faceIndex = this.params.vertexIndex % totalFaces;
                  a = indexAttribute.getX(faceIndex * 3);
                  b = indexAttribute.getX(faceIndex * 3 + 1);
                  c = indexAttribute.getX(faceIndex * 3 + 2);
             } else {
-                 // Non-indexed Geometry
                  const totalFaces = posAttribute.count / 3;
                  const faceIndex = this.params.vertexIndex % totalFaces;
                  a = faceIndex * 3;
@@ -156,32 +153,25 @@ export class Demo1_RawData {
             const pB = new THREE.Vector3().fromBufferAttribute(posAttribute, b);
             const pC = new THREE.Vector3().fromBufferAttribute(posAttribute, c);
 
-            // Update highlighter geometry
             const positions = this.faceHighlighter.geometry.attributes.position.array;
             pA.toArray(positions, 0);
             pB.toArray(positions, 3);
             pC.toArray(positions, 6);
             this.faceHighlighter.geometry.attributes.position.needsUpdate = true;
-            
-            // Sync with mesh transform
-            this.faceHighlighter.position.copy(this.mesh.position);
-            this.faceHighlighter.rotation.copy(this.mesh.rotation);
-            this.faceHighlighter.scale.copy(this.mesh.scale);
-            // Slight offset scale for Z-fight
-            this.faceHighlighter.scale.multiplyScalar(1.02);
         }
     }
 
     update() {
+        if (this.controls) this.controls.update();
         if (this.normalsHelper) this.normalsHelper.update();
         
         if (this.params.autoRotate) {
              this.mesh.rotation.y += 0.005;
              this.mesh.rotation.x += 0.002;
-             // Sync highlighters if they rely on world matrix
-             if (this.params.highlightVertex || this.params.highlightFace) {
-                 this.updateHighlights(); 
-             }
+        }
+        
+        if (this.params.highlightVertex || this.params.highlightFace) {
+             this.updateHighlights(); 
         }
     }
 
@@ -195,6 +185,7 @@ export class Demo1_RawData {
     }
 
     dispose() {
+        if (this.controls) this.controls.dispose();
         this.gui.destroy();
         this.scene.traverse(obj => {
             if (obj.geometry) obj.geometry.dispose();

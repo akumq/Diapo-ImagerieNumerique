@@ -43,7 +43,6 @@ const demos = {
 
 const deck = new Reveal({
   embedded: true,
-  // Désactiver le scaling automatique pour garder la même taille de police
   width: "100%",
   height: "100%",
   margin: 0.1,
@@ -69,7 +68,6 @@ function updateSlide(slide) {
     const demoId = slide.dataset.demo;
     
     if (demoId && demos[demoId]) {
-        // Mode split : Slides (50%) + Demo (50%)
         workbenchContainer.style.display = 'block';
         workbenchContainer.style.flex = '1';
         slidesContainer.style.flex = '1';
@@ -79,7 +77,6 @@ function updateSlide(slide) {
             workbench.loadDemo(new demos[demoId](workbench.renderer));
         }
     } else {
-        // Mode plein écran : Slides (100%)
         workbench.disposeCurrent();
         workbenchContainer.style.display = 'none';
         workbenchContainer.style.flex = '0';

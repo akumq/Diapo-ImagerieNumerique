@@ -23,7 +23,6 @@
             <p style="font-size: 0.6em; color: #888;">Approche Conceptuelle avec Three.js</p>
           </section>
           
-          <!-- PARTIE 1 : L'ÉCOSYSTÈME THREE.JS -->
           <section>
             <section>
                 <h2>L'écosystème Three.js</h2>
@@ -51,7 +50,7 @@
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Scene</strong> : L'espace (le "plateau de tournage") qui contient tout.</li>
                     <li ><strong>Camera</strong> : Le point de vue qui définit la projection.</li>
-                    <li ><strong>Renderer</strong> : Le moteur qui transforme le graphe d'objets en pixels.</li>
+                    <li ><strong>Renderer</strong> : Le moteur qui transforme le graphe d'objects en pixels.</li>
                     <li ><strong>Objects</strong> : Combinaison d'une géométrie (forme) et d'un matériau (apparence).</li>
                 </ul>
             </section>
@@ -67,7 +66,6 @@
             </section>
           </section>
 
-          <!-- PARTIE 2 : STRUCTURE & GÉOMÉTRIE -->
           <section>
             <section data-demo="raw-data">
                 <h2>2.1 Structure des Objets 3D</h2>
@@ -118,7 +116,6 @@
             </section>
           </section>
 
-          <!-- PARTIE 3 : LE PIPELINE DE RENDU -->
           <section>
             <section data-demo="pipeline" data-stage="intro">
                 <h2>3.0 Le Pipeline Graphique Programmable</h2>
@@ -190,7 +187,6 @@
             </section>
           </section>
 
-          <!-- PARTIE 4 : L'ARCHITECTURE GPU -->
           <section>
             <section data-demo="gpu-architecture" data-stage="parallel">
                 <h2>4.1 Pourquoi le GPU ?</h2>
@@ -198,7 +194,6 @@
                 <ul style="font-size: 0.7em">
                     <li><strong>CPU (Cerveau)</strong> : Quelques cœurs très rapides, optimisés pour des tâches séquentielles complexes.</li>
                     <li><strong>GPU (Muscles)</strong> : Des milliers de petits cœurs optimisés pour faire la même opération simple sur des millions de données (SIMD).</li>
-                    <li><strong>Analogie</strong> : 10 génies (CPU) vs 10 000 ouvriers spécialisés (GPU).</li>
                 </ul>
             </section>
 
@@ -206,8 +201,8 @@
                 <h2>4.2 La Mémoire Vidéo (VRAM)</h2>
                 <p>Le stockage haute performance.</p>
                 <ul style="font-size: 0.7em">
-                    <li><strong>Bande passante</strong> : La VRAM est beaucoup plus rapide que la RAM classique pour le transfert de textures et de buffers.</li>
-                    <li><strong>Coût du transfert</strong> : Envoyer des données du CPU vers le GPU est "lent". On essaie de tout stocker sur le GPU une fois pour toutes.</li>
+                    <li><strong>Bande passante</strong> : La VRAM est beaucoup plus rapide que la RAM classique pour le transfert de données.</li>
+                    <li><strong>Coût du transfert</strong> : Envoyer des données du CPU vers le GPU est "lent".</li>
                     <li><strong>Draw Calls</strong> : Chaque commande de dessin a un coût de communication (overhead).</li>
                 </ul>
             </section>
@@ -216,15 +211,13 @@
                 <h2>4.3 Les Shaders (GLSL)</h2>
                 <p>De petits programmes exécutés sur le GPU.</p>
                 <ul style="font-size: 0.7em">
-                    <li>Ce sont les "recettes" de cuisine envoyées au GPU.</li>
                     <li><strong>Vertex Shader</strong> : S'exécute pour chaque sommet (géométrie).</li>
                     <li><strong>Fragment Shader</strong> : S'exécute pour chaque pixel (couleur).</li>
-                    <li>Langage : <strong>GLSL</strong> (proche du C), compilé à la volée par la carte graphique.</li>
+                    <li>Langage : <strong>GLSL</strong> (proche du C), compilé par la carte graphique.</li>
                 </ul>
             </section>
           </section>
 
-          <!-- PARTIE 5 : LUMIÈRE & MATIÈRE -->
           <section>
             <section data-demo="lighting">
                 <h2>5.1 Modèles d'Illumination (Lambert)</h2>
@@ -256,7 +249,6 @@
             </section>
           </section>
 
-          <!-- PARTIE 6 : INTERACTION & OPTIMISATION -->
           <section>
             <section data-demo="picking">
                 <h2>6.1 Interaction : Raycasting</h2>
@@ -286,15 +278,13 @@
             </section>
           </section>
 
-          <!-- PARTIE 7 : OUVERTURE - SYSTÈMES DISTRIBUÉS -->
           <section>
             <section data-demo="distributed">
                 <h2>7.1 La Synchronisation Visuelle</h2>
                 <p>Maintenir une image cohérente entre spectateurs.</p>
                 <ul style="font-size: 0.7em">
                     <li><strong>Le Problème</strong> : Le réseau est instable (Jitter) et lent (Latence).</li>
-                    <li><strong>Désynchronisation</strong> : Si on affiche les données dès qu'elles arrivent, l'objet se téléporte.</li>
-                    <li><strong>Le Défi</strong> : Créer une illusion de fluidité à partir de données saccadées.</li>
+                    <li><strong>Désynchronisation</strong> : Risque de téléportation des objets.</li>
                 </ul>
             </section>
 
@@ -302,9 +292,8 @@
                 <h2>7.2 Snapshot Interpolation</h2>
                 <p>Voyager dans le passé pour voir le futur fluide.</p>
                 <ul style="font-size: 0.7em">
-                    <li><strong>Le Tampon (Buffer)</strong> : On n'affiche pas la position actuelle, mais on attend d'avoir 2 ou 3 positions d'avance.</li>
-                    <li><strong>Interpolation (LERP)</strong> : Le GPU calcule les positions intermédiaires entre deux messages réseau.</li>
-                    <li><strong>Coût</strong> : On voit le monde avec un léger retard (ex: 100ms), mais avec une fluidité parfaite.</li>
+                    <li><strong>Le Tampon (Buffer)</strong> : On attend d'avoir plusieurs positions d'avance.</li>
+                    <li><strong>Interpolation (LERP)</strong> : Calcul des positions intermédiaires entre snapshots.</li>
                 </ul>
             </section>
 
@@ -312,9 +301,8 @@
                 <h2>7.3 Déterminisme et États Visuels</h2>
                 <p>S'assurer que 1+1 = 2 partout.</p>
                 <ul style="font-size: 0.7em">
-                    <li><strong>Simulation Déterministe</strong> : Si les clients ont le même code et les mêmes entrées, ils génèrent la même image.</li>
-                    <li><strong>Floating Point Inconsistency</strong> : Le défi des arrondis mathématiques différents selon les CPU/GPU.</li>
-                    <li><strong>Réconciliation</strong> : Le serveur envoie périodiquement l'état "vrai" pour corriger les dérives visuelles.</li>
+                    <li><strong>Simulation Déterministe</strong> : Même code + mêmes entrées = même image.</li>
+                    <li><strong>Réconciliation</strong> : Le serveur corrige périodiquement les dérives visuelles.</li>
                 </ul>
             </section>
 

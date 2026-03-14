@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui'; 
 
 export class Demo2_Transform {
@@ -12,6 +13,9 @@ export class Demo2_Transform {
         this.camera.position.set(5, 5, 5);
         this.camera.lookAt(0, 0, 0);
         
+        this.orbit = new OrbitControls(this.camera, renderer.domElement);
+        this.orbit.enableDamping = true;
+
         // Lighting
         const ambient = new THREE.AmbientLight(0xffffff, 0.6);
         this.scene.add(ambient);
@@ -19,12 +23,10 @@ export class Demo2_Transform {
         dirLight.position.set(5, 10, 7);
         this.scene.add(dirLight);
 
-        // Grid & Axes
         const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
         this.scene.add(gridHelper);
         this.scene.add(new THREE.AxesHelper(2));
         
-        // Object
         this.geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
         this.material = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0.9 });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
@@ -35,7 +37,10 @@ export class Demo2_Transform {
         this.control.attach(this.mesh);
         this.scene.add(this.control);
 
-        // Overlay for Matrix Display
+        this.control.addEventListener('dragging-changed', (event) => {
+            this.orbit.enabled = !event.value;
+        });
+
         this.overlay = document.createElement('div');
         this.overlay.style.position = 'absolute';
         this.overlay.style.bottom = '20px';
@@ -52,7 +57,6 @@ export class Demo2_Transform {
         this.overlay.innerHTML = 'Chargement de la matrice...';
         document.getElementById('workbench-container').appendChild(this.overlay);
 
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -93,7 +97,6 @@ export class Demo2_Transform {
 
         this.gui.add(this.params, 'reset').name('Réinitialiser');
 
-        // Update params when using gizmo
         this.control.addEventListener('change', () => {
             this.syncParams();
         });
@@ -110,18 +113,14 @@ export class Demo2_Transform {
 
     formatMatrix(matrix) {
         const e = matrix.elements;
-        // Three.js matrices are column-major, but for display we usually want row-major look
-        // or at least a clear 4x4 grid.
         let html = '<div style="margin-bottom: 10px; color: #ffaa00; font-weight: bold;">Matrice de Transformation (4x4)</div>';
         html += '<table style="border-collapse: collapse; text-align: right;">';
         for (let row = 0; row < 4; row++) {
             html += '<tr>';
             for (let col = 0; col < 4; col++) {
-                // matrix.elements[col * 4 + row] because elements is column-major
                 const val = e[col * 4 + row].toFixed(3);
                 const isIdentity = (row === col && val === "1.000") || (row !== col && val === "0.000");
                 const color = isIdentity ? '#555' : '#00ff00';
-                // Highlight translation column
                 const isTranslation = col === 3 && row < 3;
                 const cellColor = isTranslation ? '#ff4444' : color;
                 
@@ -139,6 +138,7 @@ export class Demo2_Transform {
     }
 
     update() {
+        if (this.orbit) this.orbit.update();
         this.mesh.updateMatrixWorld();
         this.overlay.innerHTML = this.formatMatrix(this.mesh.matrixWorld);
     }
@@ -155,6 +155,7 @@ export class Demo2_Transform {
     dispose() {
         if (this.gui) this.gui.destroy();
         if (this.overlay) this.overlay.remove();
+        if (this.orbit) this.orbit.dispose();
         if (this.control) {
             this.control.detach();
             this.control.dispose();

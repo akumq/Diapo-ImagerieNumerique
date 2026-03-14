@@ -21,7 +21,6 @@ export class Demo12_GPUArchitecture {
         this.currentStage = 'shader';
         this.clock = new THREE.Clock();
 
-        // --- Water ---
         const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
         this.water = new Water(
             waterGeometry,
@@ -34,14 +33,13 @@ export class Demo12_GPUArchitecture {
                 sunDirection: new THREE.Vector3(),
                 sunColor: 0xffffff,
                 waterColor: 0x001e0f,
-                distortionScale: 8.0, // Mer plus agitée (passé de 3.7 à 8.0)
-                size: 2.0, // Vagues plus grandes
+                distortionScale: 8.0,
+                size: 2.0,
                 fog: false
             }
         );
         this.water.rotation.x = -Math.PI / 2;
 
-        // --- Sky ---
         this.sky = new Sky();
         this.sky.scale.setScalar(10000);
 
@@ -53,24 +51,22 @@ export class Demo12_GPUArchitecture {
 
         this.sun = new THREE.Vector3();
         this.skyParams = {
-            elevation: 0, // Fixé à l'horizon
+            elevation: 0,
             azimuth: 180
         };
 
         this.pmremGenerator = new THREE.PMREMGenerator(renderer);
         this.updateSun();
 
-        // --- Post-Processing ---
         this.composer = new EffectComposer(renderer);
         this.composer.addPass(new RenderPass(this.scene, this.camera));
         this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
         this.bloomPass.threshold = 0;
-        this.bloomPass.strength = 0.2; // Bloom légèrement augmenté pour l'éclat des vagues
+        this.bloomPass.strength = 0.2;
         this.bloomPass.radius = 0.5;
         this.composer.addPass(this.bloomPass);
         this.composer.addPass(new OutputPass());
 
-        // --- Parallelism Setup ---
         const pointsCount = 10000;
         const positions = new Float32Array(pointsCount * 3);
         for (let i = 0; i < pointsCount; i++) {
@@ -82,7 +78,6 @@ export class Demo12_GPUArchitecture {
         pointsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         this.points = new THREE.Points(pointsGeom, new THREE.PointsMaterial({ size: 0.2, color: 0x00ffff }));
 
-        // --- GUI ---
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -119,10 +114,10 @@ export class Demo12_GPUArchitecture {
         sceneEnv.add(this.sky);
         const envTarget = this.pmremGenerator.fromScene(sceneEnv);
         
-        this.scene.add(this.sky); // Réajoute le ciel à la scène principale
+        this.scene.add(this.sky);
         this.scene.environment = envTarget.texture;
         
-        this.renderer.toneMappingExposure = 0.5; // Exposition augmentée (était 0.1)
+        this.renderer.toneMappingExposure = 0.5;
     }
 
     toggleShader(enabled) {
@@ -138,7 +133,6 @@ export class Demo12_GPUArchitecture {
         this.scene.clear();
         this.scene.environment = null;
         
-        // Reset camera focus
         this.camera.lookAt(0, 0, 0);
         
         if (stage === 'parallel') {
@@ -149,7 +143,6 @@ export class Demo12_GPUArchitecture {
             this.params.info = '10,000 particules simultanées';
         } else if (stage === 'vram') {
             this.setupVramDemo();
-            // On centre la caméra face au nuage de cubes
             this.camera.position.set(0, 0, 120); 
             this.camera.lookAt(0, 0, 0);
             this.renderer.toneMappingExposure = 1.0;
@@ -158,7 +151,7 @@ export class Demo12_GPUArchitecture {
             this.scene.add(this.water);
             this.scene.add(this.sky);
             this.camera.position.set(30, 30, 100);
-            this.updateSun(); // updateSun gère lookAt et exposure
+            this.updateSun();
             this.toggleShader(this.params.useGLSL);
         }
         this.infoCtrl.updateDisplay();
@@ -175,7 +168,6 @@ export class Demo12_GPUArchitecture {
 
     update() {
         if (this.currentStage === 'shader' && this.params.useGLSL) {
-            // Accélération du temps pour une mer plus nerveuse
             this.water.material.uniforms['time'].value += 2.0 / 60.0; 
         } else if (this.currentStage === 'parallel') {
             this.points.rotation.y += 0.002;

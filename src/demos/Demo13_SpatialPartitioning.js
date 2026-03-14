@@ -11,15 +11,12 @@ export class Demo13_SpatialPartitioning {
         this.camera.position.set(0, 15, 15);
         this.camera.lookAt(0, 0, 0);
 
-        // --- Nodes Visualization ---
         this.createNodeGrids();
 
-        // --- Shared Object (The "Entity") ---
         const geom = new THREE.SphereGeometry(0.8, 32, 32);
         this.entity = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({ color: 0x00ff88 }));
         this.scene.add(this.entity);
 
-        // --- Ghost Replicas (for visual feedback) ---
         this.ghosts = [];
         for(let i=0; i<3; i++) {
             const ghost = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.3 }));
@@ -33,7 +30,6 @@ export class Demo13_SpatialPartitioning {
         pLight.position.set(0, 10, 0);
         this.scene.add(pLight);
 
-        // --- State ---
         this.params = {
             replicationDistance: 2.0,
             showBoundaries: true,
@@ -72,12 +68,10 @@ export class Demo13_SpatialPartitioning {
     update() {
         this.time += 0.01;
         
-        // Circular motion across nodes
         const x = Math.sin(this.time) * 8;
         const z = Math.cos(this.time) * 8;
         this.entity.position.set(x, 0.8, z);
 
-        // Identify current Master Node
         let masterNode = -1;
         if (x < 0 && z < 0) masterNode = 0;
         else if (x >= 0 && z < 0) masterNode = 1;
@@ -87,14 +81,11 @@ export class Demo13_SpatialPartitioning {
         this.params.info = `Master : Nœud ${masterNode + 1}`;
         this.infoCtrl.updateDisplay();
 
-        // Highlight active node
         this.nodeHelpers.forEach((h, i) => {
             h.material.opacity = (i === masterNode) ? 1.0 : 0.2;
             h.material.transparent = true;
         });
 
-        // --- Replication Logic ---
-        // If entity is close to a boundary, show a ghost in the neighbor node
         this.ghosts.forEach(g => g.visible = false);
         let ghostIdx = 0;
 
@@ -114,7 +105,6 @@ export class Demo13_SpatialPartitioning {
         const g = this.ghosts[idx];
         g.visible = true;
         g.position.set(x, 0.8, z);
-        // On simule une légère latence sur le fantôme (concept distribué)
         g.position.x += flipX ? (x > 0 ? -0.1 : 0.1) : 0;
         g.position.z += flipZ ? (z > 0 ? -0.1 : 0.1) : 0;
     }

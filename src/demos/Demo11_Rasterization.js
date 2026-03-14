@@ -10,7 +10,6 @@ export class Demo11_Rasterization {
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 5);
 
-        // 1. The "Vector" Triangle (Mathematical smooth shape)
         const triGeom = new THREE.BufferGeometry();
         this.triVertices = new Float32Array([
             -1.5, -1.0, 0.1,
@@ -28,7 +27,6 @@ export class Demo11_Rasterization {
         this.vectorTriangle = new THREE.Mesh(triGeom, this.vectorMaterial);
         this.scene.add(this.vectorTriangle);
 
-        // 2. The Pixel Grid (Rasterized representation)
         this.pixelGroup = new THREE.Group();
         this.scene.add(this.pixelGroup);
         
@@ -43,7 +41,6 @@ export class Demo11_Rasterization {
         this.pixels = [];
         this.createGrid();
 
-        // GUI
         const container = document.getElementById('workbench-container');
         this.gui = new GUI({ container: container });
         this.gui.domElement.style.position = 'absolute';
@@ -60,7 +57,6 @@ export class Demo11_Rasterization {
     }
 
     createGrid() {
-        // Clear old pixels
         while(this.pixelGroup.children.length > 0) {
             const child = this.pixelGroup.children[0];
             child.geometry.dispose();
@@ -70,7 +66,7 @@ export class Demo11_Rasterization {
         this.pixels = [];
 
         const res = this.params.resolution;
-        const size = 4; // Area size
+        const size = 4;
         const step = size / res;
         const half = size / 2;
 
@@ -95,7 +91,6 @@ export class Demo11_Rasterization {
         }
     }
 
-    // Barycentric technique to check if point is in triangle
     isPointInTriangle(p, a, b, c) {
         const v0 = [c[0] - a[0], c[1] - a[1]];
         const v1 = [b[0] - a[0], b[1] - a[1]];
@@ -118,7 +113,6 @@ export class Demo11_Rasterization {
         const time = Date.now() * 0.001;
         
         if (this.params.animate) {
-            // Move triangle vertices slightly
             const attr = this.vectorTriangle.geometry.attributes.position;
             attr.array[0] = -1.5 + Math.sin(time) * 0.5;
             attr.array[4] = -0.5 + Math.cos(time * 0.8) * 0.5;
@@ -133,7 +127,6 @@ export class Demo11_Rasterization {
         this.vectorTriangle.visible = this.params.showVector;
         this.pixelGroup.visible = this.params.showRaster;
 
-        // Update each pixel's color based on coverage
         this.pixels.forEach(p => {
             const inside = this.isPointInTriangle(p.position, a, b, c);
             if (inside) {

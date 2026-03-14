@@ -7,11 +7,12 @@ export class Demo8_Raytracing {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x111111);
 
-        // --- Observer Camera ---
+        // Observer Camera
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(5, 3, 5);
         this.camera.lookAt(0, 0, 0);
 
+        // Simulated Eye/Camera position
         this.eyeMesh = new THREE.Mesh(
             new THREE.SphereGeometry(0.2),
             new THREE.MeshBasicMaterial({ color: 0x00ffff }) 
@@ -19,6 +20,7 @@ export class Demo8_Raytracing {
         this.eyeMesh.position.set(0, 0, 3);
         this.scene.add(this.eyeMesh);
 
+        // Projection screen
         const screenGeo = new THREE.PlaneGeometry(2, 2, 10, 10);
         const screenMat = new THREE.MeshBasicMaterial({ 
             color: 0x444444, 
@@ -27,10 +29,10 @@ export class Demo8_Raytracing {
             opacity: 0.3
         });
         this.screenMesh = new THREE.Mesh(screenGeo, screenMat);
-        this.screenMesh.position.set(0, 0, 1.5); // Between Eye and Scene
+        this.screenMesh.position.set(0, 0, 1.5);
         this.scene.add(this.screenMesh);
 
-        //  for the "rendered" image on the screen
+        // Raytracing accumulation canvas
         this.canvas = document.createElement('canvas');
         this.canvas.width = 64; this.canvas.height = 64;
         this.ctx = this.canvas.getContext('2d');
@@ -47,15 +49,13 @@ export class Demo8_Raytracing {
             opacity: 0.9,
             side: THREE.DoubleSide
         });
-        this.renderedImageParams = {
-            width: 2, height: 2
-        };
+        this.renderedImageParams = { width: 2, height: 2 };
         const renderedImageGeo = new THREE.PlaneGeometry(2, 2);
         this.renderedImage = new THREE.Mesh(renderedImageGeo, renderedImageMat);
         this.renderedImage.position.copy(this.screenMesh.position);
         this.scene.add(this.renderedImage);
 
-        // 3. Simple Scene Objects
+        // Scene Objects
         this.objects = [];
         const sphere = new THREE.Mesh(
             new THREE.SphereGeometry(0.8, 32, 32),
@@ -74,13 +74,13 @@ export class Demo8_Raytracing {
         this.scene.add(box);
         this.objects.push(box);
 
-        // Light
+        // Point Light
         this.light = new THREE.PointLight(0xffffff, 1);
         this.light.position.set(2, 3, 2);
         this.scene.add(this.light);
         this.scene.add(new THREE.PointLightHelper(this.light, 0.2));
 
-        // --- Ray Viz ---
+        // Ray Visualization
         this.rayLine = new THREE.Line(
             new THREE.BufferGeometry(),
             new THREE.LineBasicMaterial({ color: 0xffff00 })
@@ -88,12 +88,11 @@ export class Demo8_Raytracing {
         this.rayLine.visible = false;
         this.scene.add(this.rayLine);
 
-        this.shadowRayLine = null;
         this.raycaster = new THREE.Raycaster();
         
-        // --- State ---
+        // Raytracing state
         this.params = {
-            speed: 50, // Rays per second approx
+            speed: 50,
             accumulate: true
         };
         this.lastTime = 0;
@@ -105,8 +104,8 @@ export class Demo8_Raytracing {
         this.gui.domElement.style.top = '10px';
         this.gui.domElement.style.right = '10px';
         
-        this.gui.add(this.params, 'speed', 1, 600).name('Rayons par frame');
-        this.gui.add({ reset: () => this.reset() }, 'reset').name('Réinitialiser');
+        this.gui.add(this.params, 'speed', 1, 600).name('Rays/Frame');
+        this.gui.add({ reset: () => this.reset() }, 'reset').name('Reset');
     }
 
     reset() {
@@ -116,31 +115,26 @@ export class Demo8_Raytracing {
     }
 
     shootRay() {
-        // Pick random pixel
+        // Random pixel sampling
         const px = Math.floor(Math.random() * 64);
         const py = Math.floor(Math.random() * 64);
 
         // Map pixel to World Space on Screen Plane
-        // Plane is 2x2 centered at 0,0,1.5
-        // x: -1 to 1, y: -1 to 1
-        const wx = (px / 64) * 2 - 1 + (1/64); // center of pixel
-        const wy = 1 - (py / 64) * 2 - (1/64); // flip Y
+        const wx = (px / 64) * 2 - 1 + (1/64);
+        const wy = 1 - (py / 64) * 2 - (1/64);
 
         const pixelPos = new THREE.Vector3(wx, wy, 1.5);
         const eyePos = this.eyeMesh.position.clone();
-        
         const dir = new THREE.Vector3().subVectors(pixelPos, eyePos).normalize();
         
         this.raycaster.set(eyePos, dir);
         const intersects = this.raycaster.intersectObjects(this.objects);
 
-        let color = '#000000'; // Void color
+        let color = '#000000';
 
-        // Visual Ray
-        // Limit ray length for visual
+        // Visualization
         const rayLength = intersects.length > 0 ? intersects[0].distance : 10;
         const endPoint = new THREE.Vector3().copy(eyePos).add(dir.multiplyScalar(rayLength));
-        
         this.rayLine.geometry.setFromPoints([eyePos, endPoint]);
         this.rayLine.visible = true;
 
@@ -148,28 +142,23 @@ export class Demo8_Raytracing {
             const hit = intersects[0];
             const objColor = hit.object.material.color;
             
-            // Simple lighting: Dot(Normal, LightDir)
-            // Transform face normal to World Space
+            // Basic Lambertian shading
             const worldNormal = hit.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld));
             const lightDir = new THREE.Vector3().subVectors(this.light.position, hit.point).normalize();
-            
             const dot = Math.max(0, worldNormal.dot(lightDir));
             
-            // Color logic
             const r = Math.floor(objColor.r * 255 * dot);
             const g = Math.floor(objColor.g * 255 * dot);
             const b = Math.floor(objColor.b * 255 * dot);
             color = `rgb(${r},${g},${b})`;
         }
 
-        // Paint Pixel
         this.ctx.fillStyle = color;
         this.ctx.fillRect(px, py, 1, 1);
         this.screenTexture.needsUpdate = true;
     }
 
     update() {
-        // Shoot N rays per frame based on speed
         const count = Math.ceil(this.params.speed / 10); 
         for(let i=0; i<count; i++) {
             this.shootRay();

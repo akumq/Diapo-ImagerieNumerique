@@ -7,7 +7,6 @@ export class Demo13_MultiplayerSync {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x050505);
 
-        // --- Viewports setup (Horizontal rows) ---
         this.views = [
             { left: 0, bottom: 0.66, width: 1.0, height: 0.34, background: new THREE.Color(0x0a0505), label: 'SERVEUR (VÉRITÉ)' },
             { left: 0, bottom: 0.33, width: 1.0, height: 0.33, background: new THREE.Color(0x050a05), label: 'CLIENT A (BRUT)' },
@@ -18,14 +17,12 @@ export class Demo13_MultiplayerSync {
         this.camera.position.set(0, 5, 8);
         this.camera.lookAt(0, 0, 0);
 
-        // --- Common Scene Elements ---
         this.scene.add(new THREE.GridHelper(20, 20, 0x333333, 0x222222));
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const light = new THREE.PointLight(0xffffff, 50);
         light.position.set(0, 10, 0);
         this.scene.add(light);
 
-        // --- Objects ---
         const geom = new THREE.SphereGeometry(0.5, 32, 32);
         
         this.serverObj = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true }));
@@ -36,7 +33,6 @@ export class Demo13_MultiplayerSync {
         this.scene.add(this.clientAObj);
         this.scene.add(this.clientBObj);
 
-        // --- State ---
         this.params = {
             tickRate: 10,
             latency: 200,
@@ -51,7 +47,6 @@ export class Demo13_MultiplayerSync {
         this.lastTickTime = 0;
         this.clock = new THREE.Clock();
 
-        // --- GUI ---
         this.gui = new GUI({ container: document.getElementById('workbench-container') });
         this.gui.domElement.style.position = 'absolute';
         this.gui.domElement.style.top = '10px';
@@ -62,7 +57,6 @@ export class Demo13_MultiplayerSync {
         this.gui.add(this.params, 'jitter', 0, 200).name('Jitter');
         this.gui.add(this.params, 'interpDelay', 0, 500).name('Interp. Buffer (ms)');
 
-        // Overlay Labels
         this.createLabels();
     }
 
@@ -96,13 +90,11 @@ export class Demo13_MultiplayerSync {
         const now = performance.now();
         const time = now * 0.001;
         
-        // 1. SERVER (Truth)
         this.serverPos.x = Math.sin(time * 2) * 3;
         this.serverPos.z = Math.cos(time * 3) * 2;
         this.serverPos.y = Math.abs(Math.sin(time * 4)) * 2 + 0.5;
         this.serverObj.position.copy(this.serverPos);
 
-        // 2. NETWORK EMISSION
         if (time - this.lastTickTime > (1 / this.params.tickRate)) {
             const snapshot = { pos: this.serverPos.clone(), ts: now };
             const send = (buf) => {
@@ -117,15 +109,12 @@ export class Demo13_MultiplayerSync {
             this.lastTickTime = time;
         }
 
-        // 3. CLIENT A (RAW)
         if (this.snapshotsA.length > 0) {
             this.clientAObj.position.copy(this.snapshotsA[this.snapshotsA.length - 1].pos);
         }
 
-        // 4. CLIENT B (INTERP)
         const renderTime = now - this.params.latency - this.params.interpDelay;
         if (this.snapshotsB.length >= 2) {
-            // Find snapshots to interpolate between
             let s0 = null, s1 = null;
             for (let i = 0; i < this.snapshotsB.length - 1; i++) {
                 if (this.snapshotsB[i].ts <= renderTime && this.snapshotsB[i+1].ts >= renderTime) {
@@ -139,7 +128,6 @@ export class Demo13_MultiplayerSync {
                 const t = (renderTime - s0.ts) / (s1.ts - s0.ts);
                 this.clientBObj.position.lerpVectors(s0.pos, s1.pos, t);
             } else if (renderTime > this.snapshotsB[this.snapshotsB.length - 1].ts) {
-                // Extrapolate if we are ahead of snapshots
                 this.clientBObj.position.copy(this.snapshotsB[this.snapshotsB.length - 1].pos);
             }
         }
@@ -159,7 +147,6 @@ export class Demo13_MultiplayerSync {
             renderer.setScissor(left, bottom, width, height);
             renderer.setScissorTest(true);
 
-            // Visibility toggle for viewports
             this.serverObj.visible = (v.label === 'SERVEUR (VÉRITÉ)');
             this.clientAObj.visible = (v.label === 'CLIENT A (BRUT)');
             this.clientBObj.visible = (v.label === 'CLIENT B (INTERPOLÉ)');
