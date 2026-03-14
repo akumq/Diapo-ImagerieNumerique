@@ -35,20 +35,31 @@ body {
   height: 100%;
   position: relative;
   background-color: var(--workbench-bg);
-  border-left: 2px solid #333;
+  /* Suppression de la bordure fixe qui peut perturber le calcul au pixel près */
+  border-left: 1px solid #222; 
   transition: all 0.3s ease-in-out;
   min-width: 0;
+  overflow: hidden; /* Évite les scrollbars pendant l'animation */
 }
 
-/* Forcer la taille de la police pour être identique partout */
+/* Forcer le canvas à occuper tout l'espace sans marge */
+#workbench-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ajustement Reveal pour maximiser l'espace */
 .reveal {
-  font-size: 32px !important; /* Taille de base fixe */
+  width: 100%;
+  height: 100%;
 }
 
 .reveal .slides {
-  text-align: left !important;
+  /* On laisse Reveal gérer la taille et le centrage via transforms */
 }
 
+/* On retire le text-align left pour laisser le thème gérer le centrage */
 .reveal h2 {
   font-size: 1.8em !important;
   margin-bottom: 0.5em !important;

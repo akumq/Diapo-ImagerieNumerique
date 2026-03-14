@@ -43,11 +43,12 @@ const demos = {
 
 const deck = new Reveal({
   embedded: true,
-  width: "100%",
-  height: "100%",
+  // Dimensions par défaut flexibles
+  width: 960,
+  height: 700,
   margin: 0.1,
-  minScale: 1,
-  maxScale: 1,
+  minScale: 0.2,
+  maxScale: 2.0,
   
   controls: true,
   progress: true,
@@ -56,9 +57,15 @@ const deck = new Reveal({
   transition: 'slide',
   backgroundTransition: 'fade',
   disableLayout: false,
-  center: true,
+  center: true, // Centrage vertical actif
   mouseWheel: true
 });
+
+// Observer pour redimensionner Reveal.js quand le conteneur change
+const slidesResizeObserver = new ResizeObserver(() => {
+  deck.layout();
+});
+slidesResizeObserver.observe(slidesContainer);
 
 deck.on('slidechanged', (event) => {
     updateSlide(event.currentSlide);
@@ -86,6 +93,9 @@ function updateSlide(slide) {
     if (slide.dataset.stage && workbench.currentDemo && workbench.currentDemo.setStage) {
         workbench.currentDemo.setStage(slide.dataset.stage);
     }
+    
+    // Forcer un layout immédiat
+    deck.layout();
 }
 
 deck.initialize().then(() => {

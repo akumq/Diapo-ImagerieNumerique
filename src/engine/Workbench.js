@@ -62,6 +62,9 @@ export class Workbench {
   onResize() {
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
+    
+    if (width === 0 || height === 0) return;
+
     this.renderer.setSize(width, height);
     if (this.currentDemo && this.currentDemo.onResize) {
         this.currentDemo.onResize(width, height);
