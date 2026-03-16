@@ -6,330 +6,709 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>webgl-workshop</title>
     <style>
-      .concept-box { background: #222; padding: 15px; border-radius: 8px; border-left: 5px solid #44ff44; }
-      .fragment-list li { margin-bottom: 0.5em; }
-      .step-title { color: #ffaa00; font-weight: bold; }
-      .future-topic { color: #ffaa00 !important; font-weight: bold; }
+      .concept-box {
+        background: #222;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #44ff44;
+      }
+      .fragment-list li {
+        margin-bottom: 0.5em;
+      }
+      .step-title {
+        color: #ffaa00;
+        font-weight: bold;
+      }
+      .future-topic {
+        color: #ffaa00 !important;
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
     <div id="app">
       <div id="slides-container" class="reveal">
         <div class="slides">
-
           <section data-demo="cube">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Logo_Universit%C3%A9_de_Lorraine.svg/1280px-Logo_Universit%C3%A9_de_Lorraine.svg.png" alt="Logo UL" style="height: 60px;">
-                <img src="https://idmc.univ-lorraine.fr/wp-content/uploads/2020/04/IDMC_LOGO_UL-02.png" alt="Logo IDMC" style="height: 60px;">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+              "
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Logo_Universit%C3%A9_de_Lorraine.svg/1280px-Logo_Universit%C3%A9_de_Lorraine.svg.png"
+                alt="Logo UL"
+                style="height: 60px"
+              />
+              <img
+                src="https://idmc.univ-lorraine.fr/wp-content/uploads/2020/04/IDMC_LOGO_UL-02.png"
+                alt="Logo IDMC"
+                style="height: 60px"
+              />
             </div>
 
-            <h2 style="margin-top: 40px;">Synthèse d'Image 3D</h2>
+            <h2 style="margin-top: 40px">Synthèse d'Image 3D</h2>
             <p>Fondements Mathématiques et Architecture de Rendu</p>
-            <p style="font-size: 0.6em; color: #888; margin-bottom: 50px;">Approche Conceptuelle avec Three.js</p>
+            <p style="font-size: 0.6em; color: #888; margin-bottom: 50px">
+              Approche Conceptuelle avec Three.js
+            </p>
 
-            <div style="display: flex; justify-content: center; gap: 50px; font-size: 0.5em; color: #aaa; border-top: 1px solid #333; padding-top: 20px;">
-                <div>
-                    <p style="margin: 0; font-weight: bold; color: #eee;">&nbsp;</p>
-                    <p style="margin: 5px 0;">Altindal Murat</p>
-                </div>
-                <div>
-                    <p style="margin: 0; font-weight: bold; color: #eee;">&nbsp;</p>
-                    <p style="margin: 5px 0;">El Bouroumi Anas</p>
-                </div>
-                <div>
-                    <p style="margin: 0; font-weight: bold; color: #eee;">&nbsp;</p>
-                    <p style="margin: 5px 0;">Sow Amadou</p>
-                </div>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                gap: 50px;
+                font-size: 0.5em;
+                color: #aaa;
+                border-top: 1px solid #333;
+                padding-top: 20px;
+              "
+            >
+              <div>
+                <p style="margin: 0; font-weight: bold; color: #eee">&nbsp;</p>
+                <p style="margin: 5px 0">Altindal Murat</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-weight: bold; color: #eee">&nbsp;</p>
+                <p style="margin: 5px 0">El Bouroumi Anas</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-weight: bold; color: #eee">&nbsp;</p>
+                <p style="margin: 5px 0">Sow Amadou</p>
+              </div>
             </div>
           </section>
-          
+
+          <!-- Slide: Nuages de Points 3D avec Wooclap -->
+          <section>
+            <h2>WooClap</h2>
+            <p
+              style="
+                font-size: clamp(0.6em, 1.7vh, 0.8em);
+                color: #bbb;
+                margin-bottom: clamp(8px, 1.2vh, 14px);
+              "
+            >
+              Question rapide avant de démarrer.
+            </p>
+            <div
+              style="
+                width: min(820px, 88vw);
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: clamp(8px, 1.2vh, 14px);
+                align-items: center;
+                justify-content: center;
+                max-height: 64vh;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 100%;
+                "
+              >
+                <img
+                  src="https://images.prismic.io/wooclap-content/aH-bT1GsbswqTIkr_11.png?auto=format%2Ccompress&q=70&fit=max&w=1280"
+                  alt="Illustration d'un nuage de points"
+                  style="
+                    width: auto;
+                    height: 230px;
+                    max-width: min(60vw, 280px);
+                    max-height: 22vh;
+                    border-radius: 12px;
+                    box-shadow: 0 0 30px rgba(68, 255, 68, 0.14);
+                  "
+                />
+              </div>
+
+              <div
+                style="
+                  background: linear-gradient(135deg, #1a1a1a, #222);
+                  border-left: 5px solid #ffaa00;
+                  border-top: 1px solid #333;
+                  border-radius: 10px;
+                  padding: clamp(10px, 1.2vh, 14px);
+                  text-align: left;
+                  width: min(90%, 620px);
+                "
+              >
+                <p
+                  style="
+                    font-size: clamp(0.72em, 1.8vh, 0.84em);
+                    color: #ffaa00;
+                    font-weight: 700;
+                    margin: 0 0 clamp(4px, 0.8vh, 8px) 0;
+                  "
+                >
+                  Participez au Wooclap
+                </p>
+                <p
+                  style="
+                    font-size: clamp(0.62em, 1.6vh, 0.76em);
+                    color: #fff;
+                    margin: 0 0 clamp(4px, 0.8vh, 6px) 0;
+                  "
+                >
+                  Code PIN:
+                  <strong style="color: #44ff44; font-family: monospace"
+                    >PDMBNC</strong
+                  >
+                </p>
+                <p
+                  style="
+                    font-size: clamp(0.56em, 1.4vh, 0.68em);
+                    color: #aaa;
+                    margin: 0;
+                    word-break: break-word;
+                  "
+                >
+                  <a
+                    href="https://app.wooclap.com/PDMBNC"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >https://app.wooclap.com/PDMBNC</a
+                  >
+                </p>
+              </div>
+            </div>
+          </section>
+
           <section>
             <section>
-                <h2>L'écosystème Three.js</h2>
-                <p>Abstraction et standardisation du rendu Web.</p>
-                <ul style="font-size: 0.8em" >
-                    <li >Créée en <strong>2010</strong>, c'est le standard pour la 3D sur le Web.</li>
-                    <li >Permet d'utiliser la puissance du GPU sans complexité inutile.</li>
-                    <li >Compatible avec <span class="future-topic">WebGL et WebGPU</span>.</li>
-                </ul>
+              <h2>L'écosystème Three.js</h2>
+              <p>Abstraction et standardisation du rendu Web.</p>
+              <ul style="font-size: 0.8em">
+                <li>
+                  Créée en <strong>2010</strong>, c'est le standard pour la 3D
+                  sur le Web.
+                </li>
+                <li>
+                  Permet d'utiliser la puissance du GPU sans complexité inutile.
+                </li>
+                <li>
+                  Compatible avec
+                  <span class="future-topic">WebGL et WebGPU</span>.
+                </li>
+              </ul>
             </section>
 
             <section>
-                <h2>1. Philosophie d'Abstraction</h2>
-                <p>Simplifier la complexité technique.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Réduction du code</strong> : On écrit "ajouter un cube" plutôt que de configurer manuellement la VRAM.</li>
-                    <li ><strong>Interopérabilité</strong> : Le moteur gère les différences entre les types de cartes graphiques.</li>
-                    <li ><strong>Approche Objet</strong> : Manipulation de concepts visuels (Caméras, Lumières) plutôt que de registres.</li>
-                </ul>
+              <h2>1. Philosophie d'Abstraction</h2>
+              <p>Simplifier la complexité technique.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Réduction du code</strong> : On écrit "ajouter un
+                  cube" plutôt que de configurer manuellement la VRAM.
+                </li>
+                <li>
+                  <strong>Interopérabilité</strong> : Le moteur gère les
+                  différences entre les types de cartes graphiques.
+                </li>
+                <li>
+                  <strong>Approche Objet</strong> : Manipulation de concepts
+                  visuels (Caméras, Lumières) plutôt que de registres.
+                </li>
+              </ul>
             </section>
 
             <section>
-                <h2>2. Anatomie d'une Application</h2>
-                <p>Les quatre piliers fondamentaux.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Scene</strong> : L'espace (le "plateau de tournage") qui contient tout.</li>
-                    <li ><strong>Camera</strong> : Le point de vue qui définit la projection.</li>
-                    <li ><strong>Renderer</strong> : Le moteur qui transforme le graphe d'objects en pixels.</li>
-                    <li ><strong>Objects</strong> : Combinaison d'une géométrie (forme) et d'un matériau (apparence).</li>
-                </ul>
+              <h2>2. Anatomie d'une Application</h2>
+              <p>Les quatre piliers fondamentaux.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Scene</strong> : L'espace (le "plateau de tournage")
+                  qui contient tout.
+                </li>
+                <li>
+                  <strong>Camera</strong> : Le point de vue qui définit la
+                  projection.
+                </li>
+                <li>
+                  <strong>Renderer</strong> : Le moteur qui transforme le graphe
+                  d'objects en pixels.
+                </li>
+                <li>
+                  <strong>Objects</strong> : Combinaison d'une géométrie (forme)
+                  et d'un matériau (apparence).
+                </li>
+              </ul>
             </section>
 
             <section>
-                <h2>3. Le Cycle de Rendu (Loop)</h2>
-                <p>Synchronisation avec l'écran.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Animation Frame</strong> : Le navigateur demande un dessin 60 fois par seconde.</li>
-                    <li ><strong>Mise à jour d'état</strong> : On modifie les propriétés juste avant de dessiner.</li>
-                    <li ><strong>Le Dessin</strong> : Un appel unique qui transforme tout le décor en pixels.</li>
-                </ul>
+              <h2>3. Le Cycle de Rendu (Loop)</h2>
+              <p>Synchronisation avec l'écran.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Animation Frame</strong> : Le navigateur demande un
+                  dessin 60 fois par seconde.
+                </li>
+                <li>
+                  <strong>Mise à jour d'état</strong> : On modifie les
+                  propriétés juste avant de dessiner.
+                </li>
+                <li>
+                  <strong>Le Dessin</strong> : Un appel unique qui transforme
+                  tout le décor en pixels.
+                </li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="raw-data">
-                <h2>2.1 Structure des Objets 3D</h2>
-                <p>La discrétisation des surfaces.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>VBO (Vertex Buffer Object)</strong> : Les sommets stockés en mémoire vidéo.</li>
-                    <li ><strong>Le Maillage</strong> : La surface formée par les triangles (optimisation GPU).</li>
-                    <li ><strong>La Normale</strong> : Vecteur essentiel pour le calcul de l'illumination.</li>
-                </ul>
+              <h2>2.1 Structure des Objets 3D</h2>
+              <p>La discrétisation des surfaces.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>VBO (Vertex Buffer Object)</strong> : Les sommets
+                  stockés en mémoire vidéo.
+                </li>
+                <li>
+                  <strong>Le Maillage</strong> : La surface formée par les
+                  triangles (optimisation GPU).
+                </li>
+                <li>
+                  <strong>La Normale</strong> : Vecteur essentiel pour le calcul
+                  de l'illumination.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="transform">
-                <h2>2.2 Algèbre Linéaire & Transformations</h2>
-                <p>Passage de l'espace 3D aux coordonnées homogènes.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Translation, Rotation, Échelle</strong> : Manipulations de base.</li>
-                    <li ><strong>Matrices 4x4</strong> : Encodage linéaire de toutes les transformations.</li>
-                </ul>
+              <h2>2.2 Algèbre Linéaire & Transformations</h2>
+              <p>Passage de l'espace 3D aux coordonnées homogènes.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Translation, Rotation, Échelle</strong> :
+                  Manipulations de base.
+                </li>
+                <li>
+                  <strong>Matrices 4x4</strong> : Encodage linéaire de toutes
+                  les transformations.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="transform">
-                <h2>2.3 La Matrice : L'outil Universel</h2>
-                <p>Efficacité et Composition.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Condensation</strong> : 16 chiffres stockent l'état spatial complet.</li>
-                    <li ><strong>Composition</strong> : On multiplie les matrices pour combiner les mouvements.</li>
-                    <li ><strong>GPU</strong> : Architecture optimisée pour le calcul matriciel massif.</li>
-                </ul>
+              <h2>2.3 La Matrice : L'outil Universel</h2>
+              <p>Efficacité et Composition.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Condensation</strong> : 16 chiffres stockent l'état
+                  spatial complet.
+                </li>
+                <li>
+                  <strong>Composition</strong> : On multiplie les matrices pour
+                  combiner les mouvements.
+                </li>
+                <li>
+                  <strong>GPU</strong> : Architecture optimisée pour le calcul
+                  matriciel massif.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="scenegraph">
-                <h2>2.4 Le Graphe de Scène</h2>
-                <p>Hiérarchie et Propagation.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Parentalité</strong> : Les mouvements des parents s'appliquent aux enfants.</li>
-                    <li ><strong>Matrices Locales vs Monde</strong> : Calcul relatif des positions.</li>
-                    <li  style="color: #ffaa00">"Matrice Monde = Parent x Locale"</li>
-                </ul>
+              <h2>2.4 Le Graphe de Scène</h2>
+              <p>Hiérarchie et Propagation.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Parentalité</strong> : Les mouvements des parents
+                  s'appliquent aux enfants.
+                </li>
+                <li>
+                  <strong>Matrices Locales vs Monde</strong> : Calcul relatif
+                  des positions.
+                </li>
+                <li style="color: #ffaa00">
+                  "Matrice Monde = Parent x Locale"
+                </li>
+              </ul>
             </section>
 
             <section data-demo="camera">
-                <h2>2.5 Caméras et Projection</h2>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Perspective</strong> : Simulation de l'œil humain (Point de fuite).</li>
-                    <li ><strong>Orthographique</strong> : Vision technique (Parallèle, sans déformation).</li>
-                    <li ><strong>Image Buffer</strong> : Gestion de la profondeur et de la visibilité des objets proches.</li>
-                </ul>
+              <h2>2.5 Caméras et Projection</h2>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Perspective</strong> : Simulation de l'œil humain
+                  (Point de fuite).
+                </li>
+                <li>
+                  <strong>Orthographique</strong> : Vision technique (Parallèle,
+                  sans déformation).
+                </li>
+                <li>
+                  <strong>Image Buffer</strong> : Gestion de la profondeur et de
+                  la visibilité des objets proches.
+                </li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="pipeline" data-stage="intro">
-                <h2>3.0 Le Pipeline Graphique Programmable</h2>
-                <p>Le voyage de la donnée vers le pixel.</p>
+              <h2>3.0 Le Pipeline Graphique Programmable</h2>
+              <p>Le voyage de la donnée vers le pixel.</p>
             </section>
-    
+
             <section data-demo="pipeline" data-stage="application">
-                <h2>3.1 Étape Application (CPU)</h2>
-                <ul style="font-size: 0.7em" >
-                    <li >Logique, physique et Culling (tri des objets visibles).</li>
-                    <li >Soumission des <strong>Draw Calls</strong> au GPU.</li>
-                    <li >Le principal goulot d'étranglement (Bottleneck).</li>
-                </ul>
+              <h2>3.1 Étape Application (CPU)</h2>
+              <ul style="font-size: 0.7em">
+                <li>Logique, physique et Culling (tri des objets visibles).</li>
+                <li>Soumission des <strong>Draw Calls</strong> au GPU.</li>
+                <li>Le principal goulot d'étranglement (Bottleneck).</li>
+              </ul>
             </section>
-    
+
             <section data-demo="pipeline" data-stage="vertex">
-                <h2>3.2 Vertex Shader (GPU)</h2>
-                <p>Traitement par sommet.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Le GPU traite chaque point simultanément.</li>
-                    <li >Projection finale sur la surface de l'écran.</li>
-                </ul>
+              <h2>3.2 Vertex Shader (GPU)</h2>
+              <p>Traitement par sommet.</p>
+              <ul style="font-size: 0.7em">
+                <li>Le GPU traite chaque point simultanément.</li>
+                <li>Projection finale sur la surface de l'écran.</li>
+              </ul>
             </section>
 
             <section data-demo="pipeline" data-stage="geometry">
-                <h2>3.3 Assemblage & Clipping</h2>
-                <p>Troncature géométrique.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Élimination des primitives hors du volume de vision.</li>
-                    <li >Division perspective (NDC).</li>
-                </ul>
+              <h2>3.3 Assemblage & Clipping</h2>
+              <p>Troncature géométrique.</p>
+              <ul style="font-size: 0.7em">
+                <li>Élimination des primitives hors du volume de vision.</li>
+                <li>Division perspective (NDC).</li>
+              </ul>
             </section>
-    
+
             <section data-demo="pipeline" data-stage="raster">
-                <h2>3.4 Rastérisation</h2>
-                <p>Discrétisation géométrie vers fragments.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Identification des pixels couverts par chaque triangle.</li>
-                    <li ><strong>Interpolation</strong> des données (couleurs, UV) sur la surface.</li>
-                </ul>
+              <h2>3.4 Rastérisation</h2>
+              <p>Discrétisation géométrie vers fragments.</p>
+              <ul style="font-size: 0.7em">
+                <li>Identification des pixels couverts par chaque triangle.</li>
+                <li>
+                  <strong>Interpolation</strong> des données (couleurs, UV) sur
+                  la surface.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="rasterization-detail">
-                <h2>3.4 Rastérisation</h2>
-                <p>Le défi de la discrétisation.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Vecteur (Jaune)</strong> : Forme mathématique parfaite, résolution infinie.</li>
-                    <li ><strong>Raster (Vert)</strong> : Approximation par une grille de pixels.</li>
-                    <li ><strong>Aliasing</strong> : L'effet d'escalier dû à la résolution limitée.</li>
-                </ul>
+              <h2>3.4 Rastérisation</h2>
+              <p>Le défi de la discrétisation.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Vecteur (Jaune)</strong> : Forme mathématique
+                  parfaite, résolution infinie.
+                </li>
+                <li>
+                  <strong>Raster (Vert)</strong> : Approximation par une grille
+                  de pixels.
+                </li>
+                <li>
+                  <strong>Aliasing</strong> : L'effet d'escalier dû à la
+                  résolution limitée.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="pipeline" data-stage="fragment">
-                <h2>3.5 Fragment Shader</h2>
-                <p>Calcul de l'illumination par pixel.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Échantillonnage des textures.</li>
-                    <li >Application des modèles de lumière.</li>
-                </ul>
+              <h2>3.5 Fragment Shader</h2>
+              <p>Calcul de l'illumination par pixel.</p>
+              <ul style="font-size: 0.7em">
+                <li>Échantillonnage des textures.</li>
+                <li>Application des modèles de lumière.</li>
+              </ul>
             </section>
 
             <section data-demo="pipeline" data-stage="screen">
-                <h2>3.6 Sortie Écran (ROP)</h2>
-                <p>Tests finaux et composition.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Z-Buffer Test</strong> : Gestion de la visibilité et profondeur.</li>
-                    <li ><strong>Blending</strong> : Mélange pour la transparence.</li>
-                </ul>
+              <h2>3.6 Sortie Écran (ROP)</h2>
+              <p>Tests finaux et composition.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Z-Buffer Test</strong> : Gestion de la visibilité et
+                  profondeur.
+                </li>
+                <li>
+                  <strong>Blending</strong> : Mélange pour la transparence.
+                </li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="gpu-architecture" data-stage="parallel">
-                <h2>4.1 Pourquoi le GPU ?</h2>
-                <p>Le secret : Le parallélisme massif.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>CPU (Cerveau)</strong> : Quelques cœurs très rapides, optimisés pour des tâches séquentielles complexes.</li>
-                    <li><strong>GPU (Muscles)</strong> : Des milliers de petits cœurs optimisés pour faire la même opération simple sur des millions de données (SIMD).</li>
-                </ul>
+              <h2>4.1 Pourquoi le GPU ?</h2>
+              <p>Le secret : Le parallélisme massif.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>CPU (Cerveau)</strong> : Quelques cœurs très rapides,
+                  optimisés pour des tâches séquentielles complexes.
+                </li>
+                <li>
+                  <strong>GPU (Muscles)</strong> : Des milliers de petits cœurs
+                  optimisés pour faire la même opération simple sur des millions
+                  de données (SIMD).
+                </li>
+              </ul>
             </section>
 
             <section data-demo="gpu-architecture" data-stage="vram">
-                <h2>4.2 La Mémoire Vidéo (VRAM)</h2>
-                <p>Le stockage haute performance.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Bande passante</strong> : La VRAM est beaucoup plus rapide que la RAM classique pour le transfert de données.</li>
-                    <li><strong>Coût du transfert</strong> : Envoyer des données du CPU vers le GPU est "lent".</li>
-                    <li><strong>Draw Calls</strong> : Chaque commande de dessin a un coût de communication (overhead).</li>
-                </ul>
+              <h2>4.2 La Mémoire Vidéo (VRAM)</h2>
+              <p>Le stockage haute performance.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Bande passante</strong> : La VRAM est beaucoup plus
+                  rapide que la RAM classique pour le transfert de données.
+                </li>
+                <li>
+                  <strong>Coût du transfert</strong> : Envoyer des données du
+                  CPU vers le GPU est "lent".
+                </li>
+                <li>
+                  <strong>Draw Calls</strong> : Chaque commande de dessin a un
+                  coût de communication (overhead).
+                </li>
+              </ul>
             </section>
 
             <section data-demo="gpu-architecture" data-stage="shader">
-                <h2>4.3 Les Shaders (GLSL)</h2>
-                <p>De petits programmes exécutés sur le GPU.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Vertex Shader</strong> : S'exécute pour chaque sommet (géométrie).</li>
-                    <li><strong>Fragment Shader</strong> : S'exécute pour chaque pixel (couleur).</li>
-                    <li>Langage : <strong>GLSL</strong> (proche du C), compilé par la carte graphique.</li>
-                </ul>
+              <h2>4.3 Les Shaders (GLSL)</h2>
+              <p>De petits programmes exécutés sur le GPU.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Vertex Shader</strong> : S'exécute pour chaque sommet
+                  (géométrie).
+                </li>
+                <li>
+                  <strong>Fragment Shader</strong> : S'exécute pour chaque pixel
+                  (couleur).
+                </li>
+                <li>
+                  Langage : <strong>GLSL</strong> (proche du C), compilé par la
+                  carte graphique.
+                </li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="lighting">
-                <h2>5.1 Modèles d'Illumination (Lambert)</h2>
-                <p>Réflexion diffuse idéale.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >L'intensité dépend de l'angle d'incidence.</li>
-                    <li  style="color: #ffaa00; font-family: monospace;">Intensité = Normale &middot; Lumière</li>
-                </ul>
+              <h2>5.1 Modèles d'Illumination (Lambert)</h2>
+              <p>Réflexion diffuse idéale.</p>
+              <ul style="font-size: 0.7em">
+                <li>L'intensité dépend de l'angle d'incidence.</li>
+                <li style="color: #ffaa00; font-family: monospace">
+                  Intensité = Normale &middot; Lumière
+                </li>
+              </ul>
             </section>
 
             <section data-demo="pbr">
-                <h2>5.2 Rendu Physiquement Réaliste (PBR)</h2>
-                <p>Modèle microfacettes.</p>
-                <ul style="font-size: 0.7em" >
-                    <li ><strong>Albedo</strong> : Couleur de base.</li>
-                    <li ><strong>Roughness</strong> : Rugosité de la surface.</li>
-                </ul>
+              <h2>5.2 Rendu Physiquement Réaliste (PBR)</h2>
+              <p>Modèle microfacettes.</p>
+              <ul style="font-size: 0.7em">
+                <li><strong>Albedo</strong> : Couleur de base.</li>
+                <li><strong>Roughness</strong> : Rugosité de la surface.</li>
+              </ul>
             </section>
 
             <section data-demo="raytracing">
-                <h2>5.3 Raytracing & Illumination Globale</h2>
-                <p>Simulation du parcours des rayons.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Alternative à la rastérisation.</li>
-                    <li >Permet des reflets et ombres parfaits.</li>
-                    <li >Plus coûteux mais physiquement plus proche de la réalité.</li>
-                </ul>
+              <h2>5.3 Raytracing & Illumination Globale</h2>
+              <p>Simulation du parcours des rayons.</p>
+              <ul style="font-size: 0.7em">
+                <li>Alternative à la rastérisation.</li>
+                <li>Permet des reflets et ombres parfaits.</li>
+                <li>
+                  Plus coûteux mais physiquement plus proche de la réalité.
+                </li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="picking">
-                <h2>6.1 Interaction : Problème</h2>
-                <p>Du clic 2D vers l'objet 3D.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Comment faire pour interragir depuis l'écran (2D) avec notre scène (3D) ?</li>
-                </ul>
+              <h2>6.1 Interaction : Problème</h2>
+              <p>Du clic 2D vers l'objet 3D.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  Comment faire pour interragir depuis l'écran (2D) avec notre
+                  scène (3D) ?
+                </li>
+              </ul>
             </section>
 
             <section data-demo="picking">
-                <h2>6.1 Interaction : Solutions</h2>
-                <ul style="font-size: 0.7em" >
-                    <li >Lancement d'un rayon depuis la caméra.</li>
-                    <li >Test d'intersection avec la géométrie de la scène.</li>
-                </ul>
+              <h2>6.1 Interaction : Solutions</h2>
+              <ul style="font-size: 0.7em">
+                <li>Lancement d'un rayon depuis la caméra.</li>
+                <li>Test d'intersection avec la géométrie de la scène.</li>
+              </ul>
             </section>
-            
+
             <section data-demo="lod">
-                <h2>6.2 Optimisation : LOD</h2>
-                <p>Level of Detail adaptatif.</p>
-                <ul style="font-size: 0.7em" >
-                    <li >Remplacement du maillage selon la distance.</li>
-                    <li >Préserve la fluidité sur les scènes complexes.</li>
-                </ul>
+              <h2>6.2 Optimisation : LOD</h2>
+              <p>Level of Detail adaptatif.</p>
+              <ul style="font-size: 0.7em">
+                <li>Remplacement du maillage selon la distance.</li>
+                <li>Préserve la fluidité sur les scènes complexes.</li>
+              </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="distributed">
-                <h2>7.1 La Synchronisation Visuelle</h2>
-                <p>Maintenir une image cohérente entre spectateurs.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Le Problème</strong> : Le réseau est instable (Jitter) et lent (Latence).</li>
-                    <li><strong>Désynchronisation</strong> : Risque de téléportation des objets.</li>
-                </ul>
+              <h2>7.1 La Synchronisation Visuelle</h2>
+              <p>Maintenir une image cohérente entre spectateurs.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Le Problème</strong> : Le réseau est instable (Jitter)
+                  et lent (Latence).
+                </li>
+                <li>
+                  <strong>Désynchronisation</strong> : Risque de téléportation
+                  des objets.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="distributed">
-                <h2>7.2 Snapshot Interpolation</h2>
-                <p>Voyager dans le passé pour voir le futur fluide.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Le Tampon (Buffer)</strong> : On attend d'avoir plusieurs positions d'avance.</li>
-                    <li><strong>Interpolation (LERP)</strong> : Calcul des positions intermédiaires entre snapshots.</li>
-                </ul>
+              <h2>7.2 Snapshot Interpolation</h2>
+              <p>Voyager dans le passé pour voir le futur fluide.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Le Tampon (Buffer)</strong> : On attend d'avoir
+                  plusieurs positions d'avance.
+                </li>
+                <li>
+                  <strong>Interpolation (LERP)</strong> : Calcul des positions
+                  intermédiaires entre snapshots.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="distributed">
-                <h2>7.3 Déterminisme et États Visuels</h2>
-                <p>S'assurer que 1+1 = 2 partout.</p>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Simulation Déterministe</strong> : Même code + mêmes entrées = même image.</li>
-                    <li><strong>Réconciliation</strong> : Le serveur corrige périodiquement les dérives visuelles.</li>
-                </ul>
+              <h2>7.3 Déterminisme et États Visuels</h2>
+              <p>S'assurer que 1+1 = 2 partout.</p>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Simulation Déterministe</strong> : Même code + mêmes
+                  entrées = même image.
+                </li>
+                <li>
+                  <strong>Réconciliation</strong> : Le serveur corrige
+                  périodiquement les dérives visuelles.
+                </li>
+              </ul>
             </section>
 
             <section data-demo="distributed">
-                <h2>7.4 Conclusion : Vers l'Image Distribuée</h2>
-                <ul style="font-size: 0.7em">
-                    <li><strong>Cloud Rendering</strong> : Fusion de flux vidéo et de géométrie locale.</li>
-                    <li><strong>L'Image n'est plus un fichier</strong> : C'est un consensus distribué en temps réel.</li>
-                </ul>
+              <h2>7.4 Conclusion : Vers l'Image Distribuée</h2>
+              <ul style="font-size: 0.7em">
+                <li>
+                  <strong>Cloud Rendering</strong> : Fusion de flux vidéo et de
+                  géométrie locale.
+                </li>
+                <li>
+                  <strong>L'Image n'est plus un fichier</strong> : C'est un
+                  consensus distribué en temps réel.
+                </li>
+              </ul>
             </section>
+          </section>
+
+          <!-- Slide finale : Quiz Kahoot -->
+          <section>
+            <h2>Kahoot</h2>
+            <p
+              style="
+                font-size: clamp(0.6em, 1.7vh, 0.8em);
+                color: #bbb;
+                margin-bottom: clamp(8px, 1.2vh, 14px);
+              "
+            >
+              Quiz final pour valider les notions clés.
+            </p>
+            <div
+              style="
+                width: min(820px, 88vw);
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: clamp(8px, 1.2vh, 14px);
+                align-items: center;
+                justify-content: center;
+                max-height: 64vh;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 100%;
+                "
+              >
+                <img
+                  src="https://kahoot.com/files/2019/02/K_familyfriends_blog-1024x576.png"
+                  alt="Illustration Kahoot"
+                  style="
+                    width: auto;
+                    height: auto;
+                    max-width: min(70vw, 420px);
+                    max-height: 24vh;
+                    border-radius: 12px;
+                    box-shadow: 0 0 30px rgba(255, 170, 0, 0.16);
+                  "
+                />
+              </div>
+
+              <div
+                style="
+                  background: linear-gradient(135deg, #1a1a1a, #222);
+                  border-left: 5px solid #ffaa00;
+                  border-top: 1px solid #333;
+                  border-radius: 10px;
+                  padding: clamp(10px, 1.2vh, 14px);
+                  text-align: left;
+                  width: min(90%, 620px);
+                "
+              >
+                <p
+                  style="
+                    font-size: clamp(0.72em, 1.8vh, 0.84em);
+                    color: #ffaa00;
+                    font-weight: 700;
+                    margin: 0 0 clamp(4px, 0.8vh, 8px) 0;
+                  "
+                >
+                  Participez au Kahoot
+                </p>
+                <p
+                  style="
+                    font-size: clamp(0.62em, 1.6vh, 0.76em);
+                    color: #fff;
+                    margin: 0 0 clamp(4px, 0.8vh, 6px) 0;
+                  "
+                >
+                  Rejoignez via
+                  <strong style="color: #44ff44">kahoot.it</strong>
+                </p>
+                <p
+                  style="
+                    font-size: clamp(0.56em, 1.4vh, 0.68em);
+                    color: #aaa;
+                    margin: 0;
+                  "
+                >
+                  Game PIN bientôt affiché...
+                </p>
+              </div>
+            </div>
           </section>
         </div>
       </div>
