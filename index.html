@@ -103,7 +103,6 @@
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Translation, Rotation, Échelle</strong> : Manipulations de base.</li>
                     <li ><strong>Matrices 4x4</strong> : Encodage linéaire de toutes les transformations.</li>
-                    <li ><strong>Quaternions</strong> : Utilisation pour éviter le <em>Gimbal Lock</em> en rotation.</li>
                 </ul>
             </section>
 
@@ -132,6 +131,7 @@
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Perspective</strong> : Simulation de l'œil humain (Point de fuite).</li>
                     <li ><strong>Orthographique</strong> : Vision technique (Parallèle, sans déformation).</li>
+                    <li ><strong>Image Buffer</strong> : Gestion de la profondeur et de la visibilité des objets proches.</li>
                 </ul>
             </section>
           </section>
@@ -179,7 +179,7 @@
             </section>
 
             <section data-demo="rasterization-detail">
-                <h2>Vecteur vs Raster</h2>
+                <h2>3.4 Rastérisation</h2>
                 <p>Le défi de la discrétisation.</p>
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Vecteur (Jaune)</strong> : Forme mathématique parfaite, résolution infinie.</li>
@@ -254,7 +254,6 @@
                 <ul style="font-size: 0.7em" >
                     <li ><strong>Albedo</strong> : Couleur de base.</li>
                     <li ><strong>Roughness</strong> : Rugosité de la surface.</li>
-                    <li ><strong>Metalness</strong> : Comportement métallique.</li>
                 </ul>
             </section>
 
@@ -264,32 +263,30 @@
                 <ul style="font-size: 0.7em" >
                     <li >Alternative à la rastérisation.</li>
                     <li >Permet des reflets et ombres parfaits.</li>
-                    <li >Plus coûteux mais physiquement exact.</li>
+                    <li >Plus coûteux mais physiquement plus proche de la réalité.</li>
                 </ul>
             </section>
           </section>
 
           <section>
             <section data-demo="picking">
-                <h2>6.1 Interaction : Raycasting</h2>
+                <h2>6.1 Interaction : Problème</h2>
                 <p>Du clic 2D vers l'objet 3D.</p>
+                <ul style="font-size: 0.7em" >
+                    <li >Comment faire pour interragir depuis l'écran (2D) avec notre scène (3D) ?</li>
+                </ul>
+            </section>
+
+            <section data-demo="picking">
+                <h2>6.1 Interaction : Solutions</h2>
                 <ul style="font-size: 0.7em" >
                     <li >Lancement d'un rayon depuis la caméra.</li>
                     <li >Test d'intersection avec la géométrie de la scène.</li>
                 </ul>
             </section>
-
-            <section data-demo="picking">
-                <h2>6.2 Mathématiques du Unproject</h2>
-                <ul style="font-size: 0.7em" >
-                    <li >Mapping des coordonnées souris vers [-1, 1].</li>
-                    <li >Inversion des matrices de Projection et de Vue.</li>
-                    <li  style="color: #ffaa00">Ray = P⁻¹ &times; V⁻¹ &times; ScreenPos</li>
-                </ul>
-            </section>
             
             <section data-demo="lod">
-                <h2>6.3 Optimisation : LOD</h2>
+                <h2>6.2 Optimisation : LOD</h2>
                 <p>Level of Detail adaptatif.</p>
                 <ul style="font-size: 0.7em" >
                     <li >Remplacement du maillage selon la distance.</li>
