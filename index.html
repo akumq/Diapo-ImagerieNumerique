@@ -267,12 +267,12 @@
               <p>La discrétisation des surfaces.</p>
               <ul style="font-size: 0.7em">
                 <li>
-                  <strong>VBO (Vertex Buffer Object)</strong> : Les sommets
-                  stockés en mémoire vidéo.
+                  <strong>Le Maillage</strong> : Un objet 3D est un maillage,
+                  composé de sommets, arêtes et faces.
                 </li>
                 <li>
-                  <strong>Le Maillage</strong> : La surface formée par les
-                  triangles (optimisation GPU).
+                  <strong>VBO (Vertex Buffer Object)</strong> : Les sommets
+                  stockés en mémoire vidéo (VRAM).
                 </li>
                 <li>
                   <strong>La Normale</strong> : Vecteur essentiel pour le calcul
@@ -324,6 +324,10 @@
                   s'appliquent aux enfants.
                 </li>
                 <li>
+                  <strong>Relativité</strong> : Chaque enfant contient une
+                  transformation locale qui lui est propre.
+                </li>
+                <li>
                   <strong>Matrices Locales vs Monde</strong> : Calcul relatif
                   des positions.
                 </li>
@@ -337,16 +341,20 @@
               <h2>2.5 Caméras et Projection</h2>
               <ul style="font-size: 0.7em">
                 <li>
-                  <strong>Perspective</strong> : Simulation de l'œil humain
-                  (Point de fuite).
+                  <strong>Projection</strong> : Caméra transforme la scène 3D en
+                  une image 2D.
                 </li>
                 <li>
-                  <strong>Orthographique</strong> : Vision technique (Parallèle,
-                  sans déformation).
+                  <strong>Caméra Perspective</strong> : Simulation de l'œil
+                  humain (Point de fuite).
                 </li>
                 <li>
-                  <strong>Image Buffer</strong> : Gestion de la profondeur et de
-                  la visibilité des objets proches.
+                  <strong>Caméra Orthographique</strong> : Vision technique
+                  (Parallèle, sans déformation).
+                </li>
+                <li>
+                  <strong>Image Buffer (Z-Buffer)</strong> : Stocke la distance
+                  de chaque pixel par rapport à la caméra.
                 </li>
               </ul>
             </section>
@@ -501,7 +509,10 @@
               <h2>5.1 Modèles d'Illumination (Lambert)</h2>
               <p>Réflexion diffuse idéale.</p>
               <ul style="font-size: 0.7em">
-                <li>L'intensité dépend de l'angle d'incidence.</li>
+                <li>Comment la lumière intéragit avec la surface.</li>
+                <li>
+                  L'intensité dépend de l'angle entre la lumière et la surface.
+                </li>
                 <li style="color: #ffaa00; font-family: monospace">
                   Intensité = Normale &middot; Lumière
                 </li>
@@ -539,13 +550,19 @@
                   Comment faire pour interragir depuis l'écran (2D) avec notre
                   scène (3D) ?
                 </li>
+                <li>La scène est en 3D / l'utilisateur intéragit en 2D.</li>
+                <li>
+                  La scène contient une position (x, y, z) / l'utilisateur
+                  intéragit via (x, y).
+                </li>
               </ul>
             </section>
 
             <section data-demo="picking">
               <h2>6.1 Interaction : Solutions</h2>
               <ul style="font-size: 0.7em">
-                <li>Lancement d'un rayon depuis la caméra.</li>
+                <li>Lancement d'un rayon depuis la caméra vers la scène.</li>
+                <li>On vérifie quel objet le rayon touche en premier.</li>
                 <li>Test d'intersection avec la géométrie de la scène.</li>
               </ul>
             </section>
@@ -554,6 +571,7 @@
               <h2>6.2 Optimisation : LOD</h2>
               <p>Level of Detail adaptatif.</p>
               <ul style="font-size: 0.7em">
+                <li>Consiste à utiliser plusieurs version d'un même objet.</li>
                 <li>Remplacement du maillage selon la distance.</li>
                 <li>Préserve la fluidité sur les scènes complexes.</li>
               </ul>
