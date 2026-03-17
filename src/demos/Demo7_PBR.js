@@ -80,7 +80,7 @@ export class Demo7_PBR {
         // UV wireframe
         this.uvWire = new THREE.LineSegments(
             new THREE.BufferGeometry(),
-            new THREE.LineBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.4 })
+            new THREE.LineBasicMaterial({ color: 0x00ff00, transparent: false, opacity: 1.0 })
         );
         this.planeMesh.add(this.uvWire);
         this.uvWire.position.z = 0.01;
@@ -156,7 +156,7 @@ export class Demo7_PBR {
             ctxU.beginPath(); ctxU.moveTo(i*stepSize, 0); ctxU.lineTo(i*stepSize, height); ctxU.stroke();
             ctxU.beginPath(); ctxU.moveTo(0, i*stepSize); ctxU.lineTo(width, i*stepSize); ctxU.stroke();
             for(let j=0; j<steps; j++) {
-                ctxU.fillStyle = '#0f0'; ctxU.font = '16px Arial';
+                ctxU.fillStyle = '#00ff00'; ctxU.font = '16px Arial';
                 ctxU.fillText(`U:${(i/steps).toFixed(1)}`, i*stepSize + 5, j*stepSize + 20);
                 ctxU.fillText(`V:${(1-j/steps).toFixed(1)}`, i*stepSize + 5, j*stepSize + 40);
             }

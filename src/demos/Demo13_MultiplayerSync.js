@@ -17,7 +17,7 @@ export class Demo13_MultiplayerSync {
         this.camera.position.set(0, 5, 8);
         this.camera.lookAt(0, 0, 0);
 
-        this.scene.add(new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa));
+        this.scene.add(new THREE.GridHelper(20, 20, 0x00ff00, 0x008800));
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const light = new THREE.PointLight(0xffffff, 50);
         light.position.set(0, 10, 0);
@@ -25,7 +25,7 @@ export class Demo13_MultiplayerSync {
 
         const geom = new THREE.SphereGeometry(0.5, 32, 32);
         
-        this.serverObj = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: false, opacity: 1.0 }));
+        this.serverObj = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, transparent: false, opacity: 1.0 }));
         this.clientAObj = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({ color: 0xff4444 }));
         this.clientBObj = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({ color: 0x44ff44 }));
 

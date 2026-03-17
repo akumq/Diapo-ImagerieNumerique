@@ -19,7 +19,7 @@ export class Demo13_SpatialPartitioning {
 
         this.ghosts = [];
         for(let i=0; i<3; i++) {
-            const ghost = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: false, opacity: 1.0 }));
+            const ghost = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, transparent: false, opacity: 1.0 }));
             ghost.visible = false;
             this.scene.add(ghost);
             this.ghosts.push(ghost);
@@ -58,7 +58,7 @@ export class Demo13_SpatialPartitioning {
 
         this.nodeHelpers = [];
         positions.forEach((pos, i) => {
-            const grid = new THREE.GridHelper(size, 10, 0xffffff, 0xaaaaaa);
+            const grid = new THREE.GridHelper(size, 10, 0x00ff00, 0x008800);
             grid.position.set(pos[0], 0, pos[1]);
             this.scene.add(grid);
             this.nodeHelpers.push(grid);

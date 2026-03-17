@@ -20,7 +20,7 @@ export class Demo3_Pipeline {
         // Materials
         this.materials = {
             application: new THREE.MeshBasicMaterial({ 
-                color: 0xffffff, 
+                color: 0x00ff00, 
                 wireframe: true,
                 transparent: false,
                 opacity: 1.0
@@ -31,8 +31,10 @@ export class Demo3_Pipeline {
                 sizeAttenuation: true 
             }),
             geometry: new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                wireframe: true
+                color: 0x00ff00,
+                wireframe: true,
+                transparent: false,
+                opacity: 1.0
             }),
             raster: new THREE.MeshBasicMaterial({ 
                 color: 0xff0000, 

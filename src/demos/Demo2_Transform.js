@@ -23,7 +23,7 @@ export class Demo2_Transform {
         dirLight.position.set(5, 10, 7);
         this.scene.add(dirLight);
 
-        const gridHelper = new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa);
+        const gridHelper = new THREE.GridHelper(10, 10, 0x00ff00, 0x008800);
         this.scene.add(gridHelper);
         this.scene.add(new THREE.AxesHelper(2));
         

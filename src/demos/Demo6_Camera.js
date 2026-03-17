@@ -51,7 +51,7 @@ export class Demo6_Camera {
         this.targetGroup = new THREE.Group();
         this.scene.add(this.targetGroup);
 
-        const grid = new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa);
+        const grid = new THREE.GridHelper(20, 20, 0x00ff00, 0x008800);
         this.scene.add(grid);
 
         const boxGeo = new THREE.BoxGeometry(1, 1, 1);

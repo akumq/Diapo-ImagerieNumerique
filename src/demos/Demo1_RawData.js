@@ -20,12 +20,12 @@ export class Demo1_RawData {
         dirLight.position.set(5, 10, 7);
         this.scene.add(dirLight);
 
-        this.scene.add(new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa));
+        this.scene.add(new THREE.GridHelper(10, 10, 0x00ff00, 0x008800));
         this.scene.add(new THREE.AxesHelper(2));
 
         this.geometry = new THREE.IcosahedronGeometry(1.5, 0);
         this.material = new THREE.MeshStandardMaterial({ 
-            color: 0xffffff, 
+            color: 0x00ff00, 
             wireframe: true,
             flatShading: true,
             roughness: 0.5,

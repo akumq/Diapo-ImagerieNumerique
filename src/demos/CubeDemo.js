@@ -14,7 +14,7 @@ export class CubeDemo {
 
     init() {
         const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, opacity: 1.0, transparent: false });
         this.cube = new THREE.Mesh(geometry, material);
         this.scene.add(this.cube);
     }

@@ -61,7 +61,7 @@ export class Demo5_SceneGraph {
         forearmMesh.position.y = 0.6;
         this.elbowPivot.add(forearmMesh);
 
-        const grid = new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa);
+        const grid = new THREE.GridHelper(10, 10, 0x00ff00, 0x008800);
         this.scene.add(grid);
 
         const container = document.getElementById('workbench-container');

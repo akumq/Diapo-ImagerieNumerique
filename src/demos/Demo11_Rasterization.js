@@ -19,7 +19,7 @@ export class Demo11_Rasterization {
         triGeom.setAttribute('position', new THREE.BufferAttribute(this.triVertices, 3));
         
         this.vectorMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffffff, 
+            color: 0x00ff00, 
             wireframe: true, 
             transparent: false, 
             opacity: 1.0 

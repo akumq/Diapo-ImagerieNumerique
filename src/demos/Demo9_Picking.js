@@ -64,7 +64,7 @@ export class Demo9_Picking {
 
         // Ray visualization
         const rayGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,-10)]);
-        this.rayLine = new THREE.Line(rayGeo, new THREE.LineBasicMaterial({ color: 0xffff00 }));
+        this.rayLine = new THREE.Line(rayGeo, new THREE.LineBasicMaterial({ color: 0x00ff00 }));
         this.scene.add(this.rayLine);
 
         // Target objects
@@ -114,7 +114,7 @@ export class Demo9_Picking {
         this.gui.add(this.params, 'view', ['Observer', 'Virtual Camera']).name('Vue').onChange(() => this.updateView());
         this.gui.add(this.params, 'hint').name('Info').disable();
 
-        const grid = new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa);
+        const grid = new THREE.GridHelper(20, 20, 0x00ff00, 0x008800);
         grid.position.y = -2;
         this.scene.add(grid);
     }

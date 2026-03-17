@@ -23,7 +23,7 @@ export class Demo8_Raytracing {
         // Projection screen
         const screenGeo = new THREE.PlaneGeometry(2, 2, 10, 10);
         const screenMat = new THREE.MeshBasicMaterial({ 
-            color: 0xffffff, 
+            color: 0x00ff00, 
             wireframe: true,
             transparent: false,
             opacity: 1.0
@@ -83,7 +83,7 @@ export class Demo8_Raytracing {
         // Ray Visualization
         this.rayLine = new THREE.Line(
             new THREE.BufferGeometry(),
-            new THREE.LineBasicMaterial({ color: 0xffffff })
+            new THREE.LineBasicMaterial({ color: 0x00ff00 })
         );
         this.rayLine.visible = false;
         this.scene.add(this.rayLine);
