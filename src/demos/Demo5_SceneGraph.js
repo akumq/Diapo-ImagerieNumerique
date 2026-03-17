@@ -4,7 +4,7 @@ import GUI from 'lil-gui';
 export class Demo5_SceneGraph {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x222222);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 2, 5);
@@ -18,7 +18,7 @@ export class Demo5_SceneGraph {
 
         this.base = new THREE.Mesh(
             new THREE.BoxGeometry(1, 0.2, 1),
-            new THREE.MeshStandardMaterial({ color: 0x444444 })
+            new THREE.MeshStandardMaterial({ color: 0x888888 })
         );
         this.scene.add(this.base);
 
@@ -50,7 +50,7 @@ export class Demo5_SceneGraph {
 
         const elbowJoint = new THREE.Mesh(
             new THREE.SphereGeometry(0.3),
-            new THREE.MeshStandardMaterial({ color: 0xffffff })
+            new THREE.MeshStandardMaterial({ color: 0x888888 })
         );
         this.elbowPivot.add(elbowJoint);
 
@@ -61,7 +61,7 @@ export class Demo5_SceneGraph {
         forearmMesh.position.y = 0.6;
         this.elbowPivot.add(forearmMesh);
 
-        const grid = new THREE.GridHelper(10, 10);
+        const grid = new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa);
         this.scene.add(grid);
 
         const container = document.getElementById('workbench-container');

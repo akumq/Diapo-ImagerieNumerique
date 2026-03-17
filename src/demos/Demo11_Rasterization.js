@@ -5,7 +5,7 @@ export class Demo11_Rasterization {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x111111);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 5);
@@ -19,9 +19,9 @@ export class Demo11_Rasterization {
         triGeom.setAttribute('position', new THREE.BufferAttribute(this.triVertices, 3));
         
         this.vectorMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0xffaa00, 
+            color: 0xffffff, 
             wireframe: true, 
-            transparent: true, 
+            transparent: false, 
             opacity: 1.0 
         });
         this.vectorTriangle = new THREE.Mesh(triGeom, this.vectorMaterial);
@@ -75,7 +75,7 @@ export class Demo11_Rasterization {
         for (let y = 0; y < res; y++) {
             for (let x = 0; x < res; x++) {
                 const mat = new THREE.MeshBasicMaterial({ 
-                    color: 0x333333, 
+                    color: 0x888888, 
                     transparent: true, 
                     opacity: this.params.opacity 
                 });

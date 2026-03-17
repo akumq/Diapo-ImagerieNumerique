@@ -5,7 +5,7 @@ export class Demo6_Camera {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x222222);
+        this.scene.background = new THREE.Color(0x333333);
 
         // Main Observer Camera
         this.mainCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
@@ -51,7 +51,7 @@ export class Demo6_Camera {
         this.targetGroup = new THREE.Group();
         this.scene.add(this.targetGroup);
 
-        const grid = new THREE.GridHelper(20, 20);
+        const grid = new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa);
         this.scene.add(grid);
 
         const boxGeo = new THREE.BoxGeometry(1, 1, 1);
@@ -131,7 +131,7 @@ export class Demo6_Camera {
         this.virtualCamMesh.visible = false;
         
         const originalBg = this.scene.background;
-        this.scene.background = new THREE.Color(0x000000);
+        this.scene.background = new THREE.Color(0x333333);
 
         renderer.setRenderTarget(this.renderTarget);
         renderer.render(this.scene, this.virtualCamera);

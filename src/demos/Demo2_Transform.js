@@ -7,7 +7,7 @@ export class Demo2_Transform {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x111111);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(5, 5, 5);
@@ -23,7 +23,7 @@ export class Demo2_Transform {
         dirLight.position.set(5, 10, 7);
         this.scene.add(dirLight);
 
-        const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
+        const gridHelper = new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa);
         this.scene.add(gridHelper);
         this.scene.add(new THREE.AxesHelper(2));
         
@@ -45,7 +45,7 @@ export class Demo2_Transform {
         this.overlay.style.position = 'absolute';
         this.overlay.style.bottom = '20px';
         this.overlay.style.left = '20px';
-        this.overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        this.overlay.style.backgroundColor = 'rgba(51, 51, 51, 0.8)';
         this.overlay.style.color = '#00ff00';
         this.overlay.style.padding = '15px';
         this.overlay.style.fontFamily = 'monospace';
@@ -53,7 +53,7 @@ export class Demo2_Transform {
         this.overlay.style.borderRadius = '8px';
         this.overlay.style.pointerEvents = 'none';
         this.overlay.style.border = '1px solid #333';
-        this.overlay.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+        this.overlay.style.boxShadow = '0 0 10px rgba(51, 51, 51, 0.5)';
         this.overlay.innerHTML = 'Chargement de la matrice...';
         document.getElementById('workbench-container').appendChild(this.overlay);
 

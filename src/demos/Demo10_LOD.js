@@ -19,19 +19,19 @@ export class Demo10_LOD {
 
         // Level 0 - High detail
         const geoHigh = new THREE.IcosahedronGeometry(2, 3); 
-        const matHigh = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true });
+        const matHigh = new THREE.MeshStandardMaterial({ color: 0xffffff, wireframe: true, opacity: 1.0, transparent: false });
         const meshHigh = new THREE.Mesh(geoHigh, matHigh);
         this.lod.addLevel(meshHigh, 0);
 
         // Level 1 - Medium detail
         const geoMed = new THREE.IcosahedronGeometry(2, 1);
-        const matMed = new THREE.MeshStandardMaterial({ color: 0xffff00, wireframe: true });
+        const matMed = new THREE.MeshStandardMaterial({ color: 0xffffff, wireframe: true, opacity: 1.0, transparent: false });
         const meshMed = new THREE.Mesh(geoMed, matMed);
         this.lod.addLevel(meshMed, 8);
 
         // Level 2 - Low detail
         const geoLow = new THREE.IcosahedronGeometry(2, 0);
-        const matLow = new THREE.MeshStandardMaterial({ color: 0x00ff00, wireframe: true });
+        const matLow = new THREE.MeshStandardMaterial({ color: 0xffffff, wireframe: true, opacity: 1.0, transparent: false });
         const meshLow = new THREE.Mesh(geoLow, matLow);
         this.lod.addLevel(meshLow, 15);
 

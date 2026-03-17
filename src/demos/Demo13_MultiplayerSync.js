@@ -5,19 +5,19 @@ export class Demo13_MultiplayerSync {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x050505);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.views = [
-            { left: 0, bottom: 0.66, width: 1.0, height: 0.34, background: new THREE.Color(0x0a0505), label: 'SERVEUR (VÉRITÉ)' },
-            { left: 0, bottom: 0.33, width: 1.0, height: 0.33, background: new THREE.Color(0x050a05), label: 'CLIENT A (BRUT)' },
-            { left: 0, bottom: 0, width: 1.0, height: 0.33, background: new THREE.Color(0x05050a), label: 'CLIENT B (INTERPOLÉ)' }
+            { left: 0, bottom: 0.66, width: 1.0, height: 0.34, background: new THREE.Color(0x332222), label: 'SERVEUR (VÉRITÉ)' },
+            { left: 0, bottom: 0.33, width: 1.0, height: 0.33, background: new THREE.Color(0x223322), label: 'CLIENT A (BRUT)' },
+            { left: 0, bottom: 0, width: 1.0, height: 0.33, background: new THREE.Color(0x222233), label: 'CLIENT B (INTERPOLÉ)' }
         ];
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 5, 8);
         this.camera.lookAt(0, 0, 0);
 
-        this.scene.add(new THREE.GridHelper(20, 20, 0x333333, 0x222222));
+        this.scene.add(new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa));
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const light = new THREE.PointLight(0xffffff, 50);
         light.position.set(0, 10, 0);
@@ -25,7 +25,7 @@ export class Demo13_MultiplayerSync {
 
         const geom = new THREE.SphereGeometry(0.5, 32, 32);
         
-        this.serverObj = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true }));
+        this.serverObj = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: false, opacity: 1.0 }));
         this.clientAObj = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({ color: 0xff4444 }));
         this.clientBObj = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({ color: 0x44ff44 }));
 

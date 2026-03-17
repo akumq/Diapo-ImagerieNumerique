@@ -5,7 +5,7 @@ export class Demo8_Raytracing {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x111111);
+        this.scene.background = new THREE.Color(0x333333);
 
         // Observer Camera
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
@@ -23,10 +23,10 @@ export class Demo8_Raytracing {
         // Projection screen
         const screenGeo = new THREE.PlaneGeometry(2, 2, 10, 10);
         const screenMat = new THREE.MeshBasicMaterial({ 
-            color: 0x444444, 
+            color: 0xffffff, 
             wireframe: true,
-            transparent: true,
-            opacity: 0.3
+            transparent: false,
+            opacity: 1.0
         });
         this.screenMesh = new THREE.Mesh(screenGeo, screenMat);
         this.screenMesh.position.set(0, 0, 1.5);
@@ -83,7 +83,7 @@ export class Demo8_Raytracing {
         // Ray Visualization
         this.rayLine = new THREE.Line(
             new THREE.BufferGeometry(),
-            new THREE.LineBasicMaterial({ color: 0xffff00 })
+            new THREE.LineBasicMaterial({ color: 0xffffff })
         );
         this.rayLine.visible = false;
         this.scene.add(this.rayLine);

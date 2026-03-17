@@ -5,7 +5,7 @@ export class Demo9_Picking {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x222222);
+        this.scene.background = new THREE.Color(0x333333);
 
         // Observer Camera
         this.mainCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
@@ -24,7 +24,7 @@ export class Demo9_Picking {
 
         const camMesh = new THREE.Mesh(
             new THREE.BoxGeometry(0.5, 0.5, 1),
-            new THREE.MeshStandardMaterial({ color: 0x666666 })
+            new THREE.MeshStandardMaterial({ color: 0x888888 })
         );
         camMesh.position.copy(this.virtualCamera.position);
         camMesh.quaternion.copy(this.virtualCamera.quaternion);
@@ -51,7 +51,7 @@ export class Demo9_Picking {
         this.scene.add(this.screenPlane);
 
         const wireGeo = new THREE.EdgesGeometry(screenGeo);
-        const wireMat = new THREE.LineBasicMaterial({ color: 0x00aaff });
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x00ff00 });
         const screenWire = new THREE.LineSegments(wireGeo, wireMat);
         this.screenPlane.add(screenWire);
 
@@ -64,7 +64,7 @@ export class Demo9_Picking {
 
         // Ray visualization
         const rayGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,-10)]);
-        this.rayLine = new THREE.Line(rayGeo, new THREE.LineBasicMaterial({ color: 0xffaa00 }));
+        this.rayLine = new THREE.Line(rayGeo, new THREE.LineBasicMaterial({ color: 0xffff00 }));
         this.scene.add(this.rayLine);
 
         // Target objects
@@ -114,7 +114,7 @@ export class Demo9_Picking {
         this.gui.add(this.params, 'view', ['Observer', 'Virtual Camera']).name('Vue').onChange(() => this.updateView());
         this.gui.add(this.params, 'hint').name('Info').disable();
 
-        const grid = new THREE.GridHelper(20, 20);
+        const grid = new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa);
         grid.position.y = -2;
         this.scene.add(grid);
     }

@@ -5,13 +5,13 @@ export class Demo13_NetworkSync {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x050505);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 5, 10);
         this.camera.lookAt(0, 0, 0);
 
-        this.scene.add(new THREE.GridHelper(20, 20, 0x444444, 0x222222));
+        this.scene.add(new THREE.GridHelper(20, 20, 0xffffff, 0xaaaaaa));
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const sun = new THREE.PointLight(0xffffff, 20);
         sun.position.set(5, 10, 5);
@@ -19,7 +19,7 @@ export class Demo13_NetworkSync {
 
         this.serverGhost = new THREE.Mesh(
             new THREE.SphereGeometry(0.5, 32, 32),
-            new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, transparent: true, opacity: 0.5 })
+            new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: false, opacity: 1.0 })
         );
         this.scene.add(this.serverGhost);
 

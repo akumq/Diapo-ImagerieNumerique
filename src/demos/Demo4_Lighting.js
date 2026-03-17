@@ -4,14 +4,14 @@ import GUI from 'lil-gui';
 export class Demo4_Lighting {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x111111);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 5);
 
         const geometry = new THREE.SphereGeometry(1.5, 64, 32);
         this.material = new THREE.MeshPhongMaterial({
-            color: 0xffffff,
+            color: 0x888888,
             flatShading: false,
             shininess: 30
         });

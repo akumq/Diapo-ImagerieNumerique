@@ -4,15 +4,16 @@ import GUI from 'lil-gui';
 export class Demo7_PBR {
     constructor(renderer) {
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x333333);
         
         const loader = new THREE.TextureLoader();
         loader.setCrossOrigin('anonymous');
 
-        // Space background
+        // Space background (used for reflections)
         loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/galaxy_starfield.png', (texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
             texture.colorSpace = THREE.SRGBColorSpace;
-            this.scene.background = texture;
+            this.scene.environment = texture;
         });
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);

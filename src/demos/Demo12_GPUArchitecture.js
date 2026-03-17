@@ -15,6 +15,7 @@ export class Demo12_GPUArchitecture {
         this.renderer.toneMappingExposure = 0.1;
 
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x333333);
         this.camera = new THREE.PerspectiveCamera(55, 1, 1, 20000);
         this.camera.position.set(30, 30, 100);
 
@@ -31,7 +32,7 @@ export class Demo12_GPUArchitecture {
                     t.wrapS = t.wrapT = THREE.RepeatWrapping;
                 }),
                 sunDirection: new THREE.Vector3(),
-                sunColor: 0xffffff,
+                sunColor: 0x333333,
                 waterColor: 0x001e0f,
                 distortionScale: 8.0,
                 size: 2.0,
@@ -114,7 +115,6 @@ export class Demo12_GPUArchitecture {
         sceneEnv.add(this.sky);
         const envTarget = this.pmremGenerator.fromScene(sceneEnv);
         
-        this.scene.add(this.sky);
         this.scene.environment = envTarget.texture;
         
         this.renderer.toneMappingExposure = 0.5;
@@ -123,7 +123,6 @@ export class Demo12_GPUArchitecture {
     toggleShader(enabled) {
         if (this.currentStage !== 'shader') return;
         this.water.visible = enabled;
-        this.sky.visible = enabled;
         this.params.info = enabled ? "Mer Déchaînée (Calcul GPU)" : "Surface Plane (Pas de Shaders)";
         this.infoCtrl.updateDisplay();
     }
@@ -149,7 +148,6 @@ export class Demo12_GPUArchitecture {
             this.params.info = '1,000 Draw Calls (Surcharge CPU)';
         } else if (stage === 'shader') {
             this.scene.add(this.water);
-            this.scene.add(this.sky);
             this.camera.position.set(30, 30, 100);
             this.updateSun();
             this.toggleShader(this.params.useGLSL);

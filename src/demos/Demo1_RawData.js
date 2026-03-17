@@ -6,10 +6,9 @@ import GUI from 'lil-gui';
 export class Demo1_RawData {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x111111);
+        this.scene.background = new THREE.Color(0x333333);
 
-        this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
-        this.camera.position.set(3, 3, 5);
+        this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);        this.camera.position.set(3, 3, 5);
         this.camera.lookAt(0, 0, 0);
         
         this.controls = new OrbitControls(this.camera, renderer.domElement);
@@ -21,26 +20,28 @@ export class Demo1_RawData {
         dirLight.position.set(5, 10, 7);
         this.scene.add(dirLight);
 
-        this.scene.add(new THREE.GridHelper(10, 10, 0x444444, 0x222222));
+        this.scene.add(new THREE.GridHelper(10, 10, 0xffffff, 0xaaaaaa));
         this.scene.add(new THREE.AxesHelper(2));
 
         this.geometry = new THREE.IcosahedronGeometry(1.5, 0);
         this.material = new THREE.MeshStandardMaterial({ 
-            color: 0x00aabb, 
+            color: 0xffffff, 
             wireframe: true,
             flatShading: true,
             roughness: 0.5,
-            metalness: 0.1
+            metalness: 0.1,
+            opacity: 1.0,
+            transparent: false
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.scene.add(this.mesh);
 
-        this.normalsHelper = new VertexNormalsHelper(this.mesh, 0.5, 0xff0000);
+        this.normalsHelper = new VertexNormalsHelper(this.mesh, 0.5, 0x00ff00);
         this.normalsHelper.visible = false;
         this.scene.add(this.normalsHelper);
 
         const vGeo = new THREE.SphereGeometry(0.1, 16, 16);
-        const vMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const vMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
         this.vertexHighlighter = new THREE.Mesh(vGeo, vMat);
         this.vertexHighlighter.visible = false;
         this.mesh.add(this.vertexHighlighter);
@@ -50,7 +51,7 @@ export class Demo1_RawData {
         const fMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide, opacity: 1.0, transparent: false });
         this.faceHighlighter = new THREE.Mesh(fGeo, fMat);
         this.faceHighlighter.visible = false;
-        this.faceHighlighter.scale.multiplyScalar(1.02); // Offset for Z-fight
+        this.faceHighlighter.scale.multiplyScalar(1.02); 
         this.mesh.add(this.faceHighlighter);
 
         const container = document.getElementById('workbench-container');
@@ -109,7 +110,7 @@ export class Demo1_RawData {
         this.mesh.geometry = this.geometry;
         
         this.scene.remove(this.normalsHelper);
-        this.normalsHelper = new VertexNormalsHelper(this.mesh, 0.5, 0xff0000);
+        this.normalsHelper = new VertexNormalsHelper(this.mesh, 0.5, 0x00ff00);
         this.normalsHelper.visible = this.params.showNormals;
         this.scene.add(this.normalsHelper);
 

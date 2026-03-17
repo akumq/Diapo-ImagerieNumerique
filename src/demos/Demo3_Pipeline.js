@@ -4,7 +4,7 @@ import GUI from 'lil-gui';
 export class Demo3_Pipeline {
     constructor(renderer) {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x000000);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 0, 4);
@@ -20,10 +20,10 @@ export class Demo3_Pipeline {
         // Materials
         this.materials = {
             application: new THREE.MeshBasicMaterial({ 
-                color: 0x888888, 
+                color: 0xffffff, 
                 wireframe: true,
-                transparent: true,
-                opacity: 0.3
+                transparent: false,
+                opacity: 1.0
             }),
             vertex: new THREE.PointsMaterial({ 
                 color: 0x00ff00, 
@@ -31,7 +31,7 @@ export class Demo3_Pipeline {
                 sizeAttenuation: true 
             }),
             geometry: new THREE.MeshBasicMaterial({
-                color: 0xffaa00,
+                color: 0xffffff,
                 wireframe: true
             }),
             raster: new THREE.MeshBasicMaterial({ 
@@ -76,7 +76,7 @@ export class Demo3_Pipeline {
         }
         
         this.params.rotate = false;
-        this.scene.background = new THREE.Color(0x000000);
+        this.scene.background = new THREE.Color(0x333333);
 
         switch (stage) {
             case 'intro':
@@ -88,36 +88,36 @@ export class Demo3_Pipeline {
             case 'application':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.application;
-                this.scene.background = new THREE.Color(0x111111);
+                this.scene.background = new THREE.Color(0x222222);
                 break;
 
             case 'vertex':
                 this.currentObject = this.pointsObj;
-                this.scene.background = new THREE.Color(0x001100);
+                this.scene.background = new THREE.Color(0x2a2a2a);
                 break;
             
             case 'geometry':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.geometry;
-                this.scene.background = new THREE.Color(0x110d00);
+                this.scene.background = new THREE.Color(0x333333);
                 break;
 
             case 'raster':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.raster;
-                this.scene.background = new THREE.Color(0x220000);
+                this.scene.background = new THREE.Color(0x3a3a3a);
                 break;
 
             case 'fragment':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.lighting;
-                this.scene.background = new THREE.Color(0x001122);
+                this.scene.background = new THREE.Color(0x333333);
                 break;
 
             case 'screen':
                 this.currentObject = this.meshObj;
                 this.meshObj.material = this.materials.lighting;
-                this.scene.background = new THREE.Color(0x222222);
+                this.scene.background = new THREE.Color(0x555555);
                 break;
         }
 
@@ -147,7 +147,7 @@ export class Demo3_Pipeline {
         table.style.top = '50%';
         table.style.left = '50%';
         table.style.transform = 'translate(-50%, -50%)';
-        table.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        table.style.backgroundColor = 'rgba(51, 51, 51, 0.9)';
         table.style.color = '#00ff00';
         table.style.fontFamily = 'monospace';
         table.style.padding = '20px';

@@ -4,6 +4,8 @@ export class CubeDemo {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x333333);
+
         this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
         this.camera.position.z = 5;
 

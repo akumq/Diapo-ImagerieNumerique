@@ -2,8 +2,8 @@
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  --slide-bg: #111;
-  --workbench-bg: #000;
+  --slide-bg: #333;
+  --workbench-bg: #333;
 }
 
 body {

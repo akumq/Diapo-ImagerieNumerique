@@ -5,7 +5,7 @@ export class Demo13_SpatialPartitioning {
     constructor(renderer) {
         this.renderer = renderer;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x050505);
+        this.scene.background = new THREE.Color(0x333333);
 
         this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
         this.camera.position.set(0, 15, 15);
@@ -19,7 +19,7 @@ export class Demo13_SpatialPartitioning {
 
         this.ghosts = [];
         for(let i=0; i<3; i++) {
-            const ghost = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.3 }));
+            const ghost = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: false, opacity: 1.0 }));
             ghost.visible = false;
             this.scene.add(ghost);
             this.ghosts.push(ghost);
@@ -58,7 +58,7 @@ export class Demo13_SpatialPartitioning {
 
         this.nodeHelpers = [];
         positions.forEach((pos, i) => {
-            const grid = new THREE.GridHelper(size, 10, colors[i], 0x222222);
+            const grid = new THREE.GridHelper(size, 10, 0xffffff, 0xaaaaaa);
             grid.position.set(pos[0], 0, pos[1]);
             this.scene.add(grid);
             this.nodeHelpers.push(grid);
